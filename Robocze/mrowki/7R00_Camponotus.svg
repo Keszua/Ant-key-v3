@@ -14,7 +14,7 @@
    version="1.1"
    id="svg923"
    inkscape:version="1.0.2-2 (e86c870879, 2021-01-15)"
-   sodipodi:docname="7 Camponotus.svg">
+   sodipodi:docname="7R00_Camponotus.svg">
   <defs
      id="defs917">
     <linearGradient
@@ -61,6 +61,17 @@
          stdDeviation="0.5588"
          id="feGaussianBlur1885" />
     </filter>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3005"
+       id="radialGradient1042"
+       cx="280"
+       cy="161.7"
+       fx="280"
+       fy="161.7"
+       r="21.49"
+       gradientTransform="matrix(0.5289,-0.2857,0.5126,0.9485,49.05,88.4)"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -70,10 +81,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="5.6"
-     inkscape:cx="354.2"
-     inkscape:cy="166.2"
+     inkscape:cx="317.1"
+     inkscape:cy="167.8"
      inkscape:document-units="px"
-     inkscape:current-layer="layer7"
+     inkscape:current-layer="layer11"
      showgrid="false"
      units="px"
      showguides="true"
@@ -86,8 +97,8 @@
      inkscape:window-maximized="1"
      inkscape:document-rotation="0">
     <sodipodi:guide
-       position="0,202.1"
-       orientation="1,0"
+       position="0,200"
+       orientation="-1,0"
        id="guide1468"
        inkscape:locked="false"
        inkscape:label=""
@@ -107,7 +118,7 @@
        inkscape:label=""
        inkscape:color="rgb(0,0,255)" />
     <sodipodi:guide
-       position="143.6,0"
+       position="143,0"
        orientation="0,1"
        id="guide1474"
        inkscape:locked="false"
@@ -121,8 +132,8 @@
        inkscape:label=""
        inkscape:color="rgb(0,0,255)" />
     <sodipodi:guide
-       position="240,364.3"
-       orientation="1,0"
+       position="240,364"
+       orientation="-1,0"
        id="guide1478"
        inkscape:locked="false"
        inkscape:label=""
@@ -136,7 +147,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -161,7 +172,8 @@
      inkscape:groupmode="layer"
      id="g3013"
      transform="translate(0,-217.8)"
-     sodipodi:insensitive="true">
+     sodipodi:insensitive="true"
+     style="display:none">
     <image
        y="162.9"
        x="604.1"
@@ -249,39 +261,34 @@
      inkscape:groupmode="layer"
      id="layer7"
      inkscape:label="cialo"
-     style="display:inline">
+     style="display:none"
+     sodipodi:insensitive="true">
     <path
-       style="fill:none;stroke:#513025;stroke-width:1px;stroke-opacity:1"
+       style="fill:none;stroke:#513025;stroke-width:1px"
        d="M 277.3,115.4 C 261.1,114.4 248.4,117.2 241.7,126.3 242.6,141.9 257.6,144.3 267.7,151.3 277.3,151.4 292.5,158.7 288.4,141.4 283.4,134.6 279.6,126.2 277.3,115.4 Z"
        id="path1514"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc" />
     <path
-       style="fill:none;stroke:#693218;stroke-width:1px;stroke-opacity:1"
-       d="M 241.9,127 237.7,126.8 C 232.9,128.1 233.3,134.4 236.2,136.4 L 241.4,136.9 C 249.4,143.6 251.5,147.3 252.8,150.7 265.5,165.4 266.7,153.2 266.9,151.5 255.9,144.5 241.5,139 241.9,127 Z"
+       style="fill:none;stroke:#693218;stroke-width:1px"
+       d="M 241.9,127 237.7,126.8 C 232.9,128.1 233.3,134.4 236.2,136.4 L 241.4,136.9 C 249.4,143.6 251.5,147.3 252.8,150.7 264.6,166.1 289.9,159.7 294.2,153.6 293.1,151.7 291.7,150.3 289.2,147 288.8,156.9 271.2,151 266.9,151.5 255.9,144.5 241.5,139 241.9,127 Z"
        id="path1516"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccccc" />
+       sodipodi:nodetypes="ccccccccc" />
     <path
-       style="fill:none;stroke:#685347;stroke-width:1px;stroke-opacity:1"
-       d="M 267.3,151.5 C 254.2,170.1 279.5,184.1 298,187.3 305.5,176.6 295.4,152.2 289.5,147.1 288.6,156.2 276.6,152.5 267.3,151.5 Z"
-       id="path1520"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccc" />
-    <path
-       style="fill:none;stroke:#865342;stroke-width:1px;stroke-opacity:1"
+       style="fill:none;stroke:#865342;stroke-width:1px"
        d="M 277.5,115.4 C 288,113.1 298.9,114.1 310.4,119.3 330,123.4 335.1,130.7 341,142 343.2,149.9 337.5,156.3 344.5,161.2 347.3,175.7 328.1,172.5 314.1,173.8 305.8,172.4 299.3,159.7 289.8,147.1 L 288.7,141.5 C 283.4,134 280,125 277.5,115.4 Z"
        id="path1534"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccccc" />
     <path
-       style="fill:none;stroke:#5a3420;stroke-width:1px;stroke-opacity:1"
+       style="fill:none;stroke:#5a3420;stroke-width:1px"
        d="M 332.9,173.4 C 329.3,174.1 317,174.2 313.4,174.1 311.9,191.6 323.8,198.3 327.7,198 334.5,196.5 333.8,181.4 332.9,173.4 Z"
        id="path1540"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc" />
     <path
-       style="fill:none;stroke:#5a2c0f;stroke-width:1px;stroke-opacity:1"
+       style="fill:none;stroke:#5a2c0f;stroke-width:1px"
        d="M 333.7,173.5 C 338,172.3 341.1,171.9 343.5,169.2 353.2,172.4 357.3,179.6 359.5,187.5 359.3,189.4 360,190.4 357.7,192.1 353.3,193.9 339.2,190.1 338.5,189.1 332.8,182.8 335.2,178.9 333.7,173.5 Z"
        id="path1546"
        inkscape:connector-curvature="0"
@@ -307,41 +314,43 @@
        r="2" />
     <circle
        style="fill:none;stroke:#00ff00"
-       id="circle906"
-       cx="298.5"
-       cy="185.5"
-       r="2" />
-    <circle
-       style="fill:none;stroke:#00ff00"
        id="circle908"
        cx="344.5"
        cy="168.5"
        r="2" />
+    <ellipse
+       style="display:inline;fill:none;stroke:#04ff00;stroke-opacity:1"
+       id="ellipse994"
+       cx="279.4"
+       cy="156.5"
+       rx="1.894"
+       ry="1.957" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer10"
      inkscape:label="noga3"
-     style="display:none">
+     style="display:none"
+     sodipodi:insensitive="true">
     <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:1px"
+       style="fill:none;stroke:#000000;stroke-width:1px"
        d="M 365.5,183.6 C 377.8,170.8 390,161.1 425.2,143.9 426.2,147.2 425.7,151.2 430,151.2 401.2,164.8 393.6,194.9 366.4,193 357.8,190.4 358.8,187.2 365.5,183.6 Z"
        id="path1548"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc" />
     <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:1px"
+       style="fill:none;stroke:#000000;stroke-width:1px"
        d="M 426.3,143.7 C 426.4,146.7 425.6,150.4 430.7,149.8 L 498.8,184.8 C 497.2,187 498.9,191.5 499.5,195.2 499.6,191.8 498.5,187.9 499.8,185 509.2,186.2 505.7,180.3 503.9,179.3 475.9,164.9 455.2,151.8 426.3,143.7 Z"
        id="path1550"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc" />
     <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:1px"
+       style="fill:none;stroke:#000000;stroke-width:1px"
        d="M 505.1,185.6 506.8,182.6 549.3,211.4 550,212.9 563.2,213.9 564.2,215.7 574.5,213.9 577.6,206.8 578.6,204 582.1,204.3 583.6,209.1 579.1,208.3 577.6,213.4 578.1,215.9 565.2,217.2 566.4,219.2 561.6,216.9 550,215.1 V 217.4 L 544.2,211.6 Z"
        id="path1552"
        inkscape:connector-curvature="0" />
     <circle
-       style="display:inline;fill:none;stroke:#0b00ff;stroke-opacity:1"
+       style="fill:none;stroke:#0b00ff"
        id="circle928"
        cx="359.5"
        cy="188.5"
@@ -351,31 +360,32 @@
      inkscape:groupmode="layer"
      id="layer4"
      inkscape:label="noga2"
-     style="display:none">
+     style="display:none"
+     sodipodi:insensitive="true">
     <path
-       style="display:inline;fill:none;stroke:#000300;stroke-width:1.0016"
+       style="fill:none;stroke:#000300;stroke-width:1.0016"
        d="M 328.3,168.9 C 325.6,164.1 333.1,158.6 333.9,167.2 L 346.5,226 C 346.3,231.2 343.8,229.4 341.9,228.5 336.9,208.6 331.5,192.4 328.3,168.9 Z"
        id="path1536"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc" />
     <path
-       style="display:inline;fill:none;stroke:#00da00;stroke-width:1px"
+       style="fill:none;stroke:#00da00;stroke-width:1px"
        d="M 327.5,164.7 C 327.8,174 330.1,184.8 333.6,198.5 331,198.6 328.4,200.4 325.8,197 L 324.8,169.9 C 325.1,167.6 326.6,165.3 327.5,164.7 Z"
        id="path1538"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc" />
     <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:1px"
+       style="fill:none;stroke:#000000;stroke-width:1px"
        d="M 343.8,229.3 349.6,264.8 350,273 354.6,273.7 351.4,263 345.4,230 Z"
        id="path1542"
        inkscape:connector-curvature="0" />
     <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:1px"
+       style="fill:none;stroke:#000000;stroke-width:1px"
        d="M 350.9,273.2 352.5,284.1 354.5,284.6 354.6,289.5 356.6,290.2 358.8,293.4 362.9,293 362.1,289.8 357.3,287 357.5,283.7 354.1,280.9 352.7,273.4 Z"
        id="path1544"
        inkscape:connector-curvature="0" />
     <ellipse
-       style="display:inline;fill:none;stroke:#000fff;stroke-opacity:1"
+       style="fill:none;stroke:#000fff"
        id="ellipse918"
        cx="328.4"
        cy="195.5"
@@ -386,69 +396,108 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="noga1"
-     style="display:none"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <g
        inkscape:groupmode="layer"
        id="layer3"
-       inkscape:label="odn1">
+       inkscape:label="odn1-1"
+       style="display:inline">
       <path
-         id="path1518"
-         style="mix-blend-mode:screen;fill:#834e40;fill-rule:evenodd;stroke:#00c400;stroke-width:1.0016"
-         d="M 261.4,135.1 C 264,138 265.3,136.5 261.1,141.9 268.5,145.3 276.2,170.1 286.7,184.1 296.1,188.1 303.9,193 300,178.8 294.3,161.8 274.5,134.5 261.4,135.1 Z" />
+         style="display:inline;fill:#6e4435;fill-opacity:1;stroke:#685347;stroke-width:1px"
+         d="M 271.2,151.6 C 252.1,168.8 279.5,184.1 298,187.3 299.6,187.7 301.1,185.2 301.6,183 304.2,172.4 295.4,155.7 286.2,152 279.5,153.4 280.5,152.6 271.2,151.6 Z"
+         id="path1520"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccscc" />
       <ellipse
          style="fill:none;stroke:#0000ff"
+         id="ellipse992"
+         cx="279.4"
+         cy="156.5"
+         rx="1.894"
+         ry="1.957" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="layer11"
+       inkscape:label="odn1-2"
+       style="display:inline">
+      <path
+         id="path1518"
+         style="display:inline;opacity:1;mix-blend-mode:normal;fill:url(#radialGradient1042);fill-opacity:1;fill-rule:evenodd;stroke:#693218;stroke-width:1.0016;stroke-opacity:1"
+         d="M 261.4,135.1 C 259.3,135.7 257.5,138.5 261.1,141.9 268.5,145.3 276.2,170.1 286.7,184.1 296.1,188.1 303.9,193 300,178.8 294.3,161.8 274.5,134.5 261.4,135.1 Z"
+         sodipodi:nodetypes="ccccc" />
+      <ellipse
+         style="display:inline;fill:none;stroke:#0000ff"
          id="ellipse894"
          cx="298.4"
          cy="185.5"
          rx="1.894"
          ry="1.957" />
-      <ellipse
-         style="fill:none;stroke:#0000ff"
-         id="ellipse898"
-         cx="328.4"
-         cy="194.5"
-         rx="1.894"
-         ry="1.957" />
       <path
-         style="fill:none;fill-rule:evenodd;stroke:#582e22;stroke-width:4.1575;filter:url(#filter1883)"
+         style="display:inline;fill:none;fill-rule:evenodd;stroke:#582e22;stroke-width:4.1575;filter:url(#filter1883)"
          d="M 262.9,137.1 C 276.5,142.3 296.6,171.5 297.5,183.5"
          id="path981"
          sodipodi:nodetypes="cc" />
+      <ellipse
+         style="display:inline;fill:none;stroke:#0000ff"
+         id="ellipse1017"
+         cx="261.4"
+         cy="138.5"
+         rx="1.894"
+         ry="1.957" />
     </g>
-    <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:1px"
-       d="M 260.4,135 C 265.9,137.7 262.5,139.7 260.9,141.8 256.2,161.6 249.9,172.9 243.9,185.4 245.4,188.5 245.6,191.1 244.3,193.2 242.9,194.8 243.3,197.1 244.3,199.6 242.4,199.3 241.3,197.6 241.8,192.5 242.6,190.5 242.5,188.6 240.4,187.1 L 237.9,189.3 233.6,188.2 C 240.7,166.2 250.8,151.2 260.4,135 Z"
-       id="path1524"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccccccccc" />
-    <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:1px"
-       d="M 234.4,188.6 C 231.7,192.1 229.7,195.3 225.4,205.3 222.4,220.1 220.1,219.4 218.7,225.8 L 223,231.3 C 220.7,225.5 227.7,214.5 230.1,206.1 230.8,202 231.9,197.8 235.9,193.4 239.5,189.1 238.5,190.8 234.4,188.6 Z"
-       id="path1526"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccccc" />
-    <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:1px"
-       d="M 219,227 212.6,233.1 214.7,237.9 220.5,228.3 Z"
-       id="path1528"
-       inkscape:connector-curvature="0" />
-    <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:1px"
-       d="M 212.9,234.3 206.1,238.1 208.3,242.9 209.6,239.6 213.4,236.9 Z"
-       id="path1530"
-       inkscape:connector-curvature="0" />
-    <path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:1px"
-       d="M 206.6,239.9 195.2,237.6 195.5,247.7 197,240.9 204.3,241.7 202.5,244.9 206.3,241.7 Z"
-       id="path1532"
-       inkscape:connector-curvature="0" />
+    <g
+       inkscape:groupmode="layer"
+       id="layer12"
+       inkscape:label="odn1-3"
+       style="display:inline">
+      <ellipse
+         style="display:inline;fill:none;stroke:#0000ff"
+         id="ellipse1019"
+         cx="261.4"
+         cy="138.5"
+         rx="1.894"
+         ry="1.957" />
+      <path
+         style="display:inline;fill:none;stroke:#000000;stroke-width:1px"
+         d="M 259.6,137.7 C 261.5,134.8 264.6,137.4 262.1,141.3 256.9,160.6 249,172.6 243.9,185.4 245.4,188.5 245.6,191.1 244.3,193.2 242.9,194.8 243.3,197.1 244.3,199.6 242.4,199.3 241.3,197.6 241.8,192.5 242.6,190.5 242.5,188.6 240.4,187.1 L 237.9,189.3 C 237.3,189.5 235.3,189.8 235,187.7 242.1,165.7 256.6,141.3 259.6,137.7 Z"
+         id="path1524"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccccccccc" />
+      <ellipse
+         style="display:inline;fill:none;stroke:#0000ff"
+         id="ellipse1025"
+         cx="236.5"
+         cy="189.1"
+         rx="1.894"
+         ry="1.957" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="layer13"
+       inkscape:label="odn1-4"
+       style="display:inline">
+      <ellipse
+         style="display:inline;fill:none;stroke:#0000ff"
+         id="ellipse1027"
+         cx="236.5"
+         cy="189.1"
+         rx="1.894"
+         ry="1.957" />
+      <path
+         style="display:inline;fill:none;stroke:#000000;stroke-width:1px"
+         d="M 208.3,242.9 209.6,239.6 213.4,236.9 214.7,237.9 220.5,228.3 223,231.3 C 220.7,225.5 227.7,214.5 230.1,206.1 230.8,202 231.9,197.8 235.9,193.4 239.5,189.1 237.1,187.2 234.4,188.6 231.7,192.1 229.7,195.3 225.4,205.3 222.4,220.1 220.1,219.4 218.7,225.8 L 219,227 212.6,233.1 212.9,234.3 206.1,238.1 206.6,239.9 195.2,237.6 195.5,247.7 197,240.9 204.3,241.7 202.5,244.9 206.3,241.7 Z"
+         id="path1526"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccccccccccccccccccccc" />
+    </g>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer8"
      inkscape:label="polaczenie"
-     style="display:none;opacity:0.355">
+     style="display:none;opacity:0.355"
+     sodipodi:insensitive="true">
     <path
        style="fill:none;stroke:#de0000;stroke-width:1px"
        d="M 344.6,168.3 C 346.6,166.3 344.8,163.8 345.2,161.6 347.2,162.9 346,162.1 348,161.3 347.4,158.9 347.6,157.8 346.6,156.6 349.9,144.8 350.3,140.7 354.2,146.4 357.1,150.7 360,160.2 362.6,164.9 L 366.2,165.4 C 367.3,168.7 366,170.7 368,173.9 365.8,175 365.7,174.4 362.4,174.5 358.2,172.8 354.8,173 351.8,173.7 349.4,170.5 346.7,169.1 344.6,168.3 Z"
@@ -460,7 +509,8 @@
      inkscape:groupmode="layer"
      id="layer9"
      inkscape:label="odwlok"
-     style="display:none">
+     style="display:none"
+     sodipodi:insensitive="true">
     <path
        style="fill:none;stroke:#000000;stroke-width:1px"
        d="M 367.9,173.7 C 366.2,163.5 365.7,151 361.9,145.2 L 361.8,134.3 C 374.6,118.7 382.8,118.9 391.7,118.2 399.9,144.3 400.6,170.4 390.4,188.6 382.3,186.5 374.6,182.5 367.9,173.7 Z"
