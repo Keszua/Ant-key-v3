@@ -1,6 +1,6 @@
 # Skrypt, który otwiera i przeszukuje plik .svg 
-# Plik svg musi zawieerać odpowiednie nazwy warts i podwarst
-# Szukane wartsy:
+# Plik svg musi zawierać odpowiednie nazwy warts i podwarst
+# Szukane warstwy jak w strukturze. 
 # Należy przygotować plik np: "7R00_Camponotus.svn"
 # Dodać go do tablicy nazw plików
 # Wyniki zapsuje do "7R00_Camponotus.js"
@@ -11,58 +11,20 @@ import os
 
 time_start = time.time()
 
+listaPlikow = ['6Q00_Formica_sanguinea', '7R00_Camponotus']
 
-listaPlikow = ['7R00_Camponotus' ]
+listaNogi = ({'noga1': ['odn1_1', 'odn1_2', 'odn1_3']},
+            {'noga2': ['odn2_1', 'odn2_2', 'odn2_3']},  
+            {'noga3': ['odn3_1', 'odn3_2', 'odn3_3']},  )
+# listaOdn = ['odn1_1', 'odn1_2', 'odn1_3']
 
-fileName=(f"{listaPlikow[0]}.js")
-
+#--------------------------------------------------------------------------------------------------
 def file_path(relative_path):
     dir = os.path.dirname(os.path.abspath(__file__))
     split_path = relative_path.split("/")
     new_path = os.path.join(dir, *split_path)
     return new_path
 
-# with open(file_path(fileName), "w") as f:
-#     f.write("Powerful you have become.")
-
-# mrowka = {
-    
-#     cialo: {
-#         gl: {x: 0,  y: 0},
-#         n1: {x: 0,  y: 0},
-#         n2: {x: 0,  y: 0},
-#         n3: {x: 0,  y: 0},
-#         st: {x: 0,  y: 0},
-#         d: [ ],
-#     },
-
-#     noga1: {
-#         odn1: {
-#             c1: {x: 0, y: 0 },
-#             c2: {x: 0, y: 0 },
-#             path: [
-#                 {   style: {  zIndex: 6, visibility: "visible" , stroke: '#592e00', strokeWidth: 1,  strokeOpacity: 1, strokeMiterlimit:4, fill: '#834e40', fillOpacity: 1 },
-#                     d: '', },
-#             ],
-#         },
-#         odn2: {
-#             c1: {x: 0, y: 0 },
-#             c2: {x: 0, y: 0 },
-#             path: [
-#                 {   style: {  zIndex: 6, visibility: "visible" , stroke: '#592e00', strokeWidth: 1,  strokeOpacity: 1, strokeMiterlimit:4, fill: '#834e40', fillOpacity: 1 },
-#                     d: '', },
-#             ],
-#         },
-#         odn3: {
-#             c1: {x: 0, y: 0 },
-#             c2: {x: 0, y: 0 },
-#             path: [
-#                 {   style: {  zIndex: 6, visibility: "visible" , stroke: '#592e00', strokeWidth: 1,  strokeOpacity: 1, strokeMiterlimit:4, fill: '#834e40', fillOpacity: 1 },
-#                     d: '', },
-#             ],
-#         },
-#     }
-# }
 
 mrowka = {
     'cialo': {
@@ -71,40 +33,29 @@ mrowka = {
         'n2': {'x': 0,  'y': 0},
         'n3': {'x': 0,  'y': 0},
         'st': {'x': 0,  'y': 0},
-        'd': [ 
-            "M 277.3,115.4 C 261.1,114.4 248.4,117.2 241.7,126.3 242.6,141.9 257.6,144.3 267.7,151.3 277.3,151.4 292.5,158.7 288.4,141.4 283.4,134.6 279.6,126.2 277.3,115.4 Z",
-            "M 241.9,127 236.1,127.3 C 231.8,129.1 231.7,134.9 236.6,137.1 L 241.4,136.9 C 249.4,143.6 251.5,147.3 252.8,150.7 266,166.5 268.2,156 268.8,151.6 256.4,145.4 241.5,139 241.9,127 Z",
-        ],
-
+        'd': [ ],
     }, 
-    5: "e",
     'noga1': {
-        'odn1': {
+        'odn1_1': {
             'c1': {'x': 0, 'y': 0 },
             'c2': {'x': 0, 'y': 0 },
-            'path': [
-                # {   'style': {  'zIndex': 6, 'visibility': "visible" , 'stroke': '#592e00', 'strokeWidth': 1,  'strokeOpacity': 1, 'strokeMiterlimit':4, 'fill': '#834e40', 'fillOpacity': 1 },
-                #     'd': '', },
-                # {   'style': {  'zIndex': 6, 'visibility': "visible" , 'stroke': '#592e00', 'strokeWidth': 1,  'strokeOpacity': 1, 'strokeMiterlimit':4, 'fill': '#834e40', 'fillOpacity': 1 },
-                #     'd': '', },
-            ],
+            'path': [ ],
         },
-        'odn2': {
+        'odn1_2': {
             'c1': {'x': 0, 'y': 0 },
             'c2': {'x': 0, 'y': 0 },
             'path': [],
         },
-        'odn3': {
+        'odn1_3': {
             'c1': {'x': 0, 'y': 0 },
             'c2': {'x': 0, 'y': 0 },
             'path': [],
         },
-    }
+    },
+
 }
 
-
-
-
+# funkcja do przerobienia słownika na jsona i zapisuje do pliku
 def konwertuj_obiekt( obj, tab ):
 
     for key, val in obj.items():
@@ -118,7 +69,7 @@ def konwertuj_obiekt( obj, tab ):
             if type(val) is list:
                 fileW.write(tab*'\t' + f'{key}: [\n')
                 tab += 1
-                
+            
                 for el in val:
                     if type(el) is str:
                         fileW.write(tab*'\t' + f"'{el}' ,\n")    
@@ -131,27 +82,126 @@ def konwertuj_obiekt( obj, tab ):
                             fileW.write(tab*'\t' + '},\n' )    
                         else: 
                             konwertuj_obiekt( el, tab )
-                
+            
                 tab -= 1
                 fileW.write(tab*'\t' + '],\n')
-
-            else: 
+         
+            else:
                 if type(val) is int:
                     fileW.write(tab*'\t' + f'{key}: {val},\n')
                 else:
                     fileW.write(tab*'\t' + f"{key}: '{val}',\n")
 
 
-fileW = open(file_path(fileName), mode="w") # w : po otwarciu, kasowana jest zawartość
-fileW.write("export const mrowka = {\n")
+# wyszukuje tylko potrzebne style i zamienia ich nazwy
+def selektorStylow(tablica):
+    if tablica[0] == 'visibility':
+        return tablica
+    elif tablica[0] == 'opacity':
+        return tablica
+    elif tablica[0] == 'stroke':
+        return tablica
+    elif tablica[0] == 'stroke-width':
+        tablica[0] = 'strokeWidth'
+        return tablica
+    elif tablica[0] == 'stroke-opacity':
+        tablica[0] = 'strokeOpacity'
+        return tablica
+    elif tablica[0] == 'fill': 
+        return tablica
+    elif tablica[0] == 'fill-opacity':
+        tablica[0] = 'fillOpacity'
+        return tablica
+    else:
+        return None
 
-# fileW.write("    cialo: {\n\n")
-# fileW.write("    },\n\n")
 
-tabulator = 1
-konwertuj_obiekt(mrowka, tabulator)
-fileW.write("\n}\n")
-fileW.close()
+#--------------------------------------------------------------------------------------------------
+                    #        
+  ### ##    ####        #### 
+  #  #  #       #  ##   #   #
+  #  #  #   #####   #   #   #
+  #  #  #  #    #   #   #   #
+  #  #  #   ### #  ###  #   #
+#--------------------------------------------------------------------------------------------------
+
+
+for plik in listaPlikow:
+    print('plik', plik)
+
+    # fileNameSVG=(f"./../../Robocze/mrowki/{listaPlikow[0]}.svg")
+    # fileNameJS=(f"{listaPlikow[0]}.js")
+    fileNameSVG=(f"./../../Robocze/mrowki/{plik}.svg")
+    fileNameJS=(f"{plik}.js")
+
+    # Otwiera plik
+    fileR = open(file_path(fileNameSVG), mode="r")   # r tylko do odczytu
+    print('fileR', fileR)
+
+    # Przeszukanie pliku .svg
+    licznik = 0
+    licznikPath = 0
+    znalezionyLabel = False
+    znalezionyPath = False
+
+    for obNoga in listaNogi:
+        # print('obNoga', obNoga)
+
+        for keyNoga in obNoga:
+            # print('keyNoga', keyNoga)
+            
+            for elTab_czlon in obNoga[keyNoga]:
+                # print('elCzlon', elTab_czlon)    
+                objPath =  { 'style': {}, 'd': '' }
+                mrowka[keyNoga] = {elTab_czlon: {} }
+                mrowka[keyNoga][elTab_czlon] = {'path': []}
+
+                for line in fileR:
+                    if keyNoga in line:
+                        znalezionyLabel = True
+                        
+                    if znalezionyLabel and '</g>' in line:
+                        break
+
+                    if znalezionyLabel and '<path' in line:
+                        znalezionyPath = True
+
+                    if znalezionyLabel and znalezionyPath and '/>' in line:
+                        znalezionyPath = False
+                        # mrowka['noga1']['odn1_1']['path'].append(objPath)
+                        mrowka[keyNoga][elTab_czlon]['path'].append(objPath)
+                        
+                    if znalezionyLabel and znalezionyPath and 'style=' in line:
+                        lista = line.replace('style=', '').strip().strip('"').split(';')
+
+                        newList = []
+                        for el in lista:
+                            newList.append(el.split(':'))
+
+                        wyselekcjonowaneStyle = []
+                        for el in newList:
+                            wynik = selektorStylow(el)
+                            if wynik:
+                                wyselekcjonowaneStyle.append(wynik)
+
+                        objStyle = dict(wyselekcjonowaneStyle)
+                        objPath['style'] = objStyle
+                        
+
+                    if znalezionyLabel and znalezionyPath and ' d=' in line:
+                        # punkty = line.replace('d=', '').strip()
+                        # objPath['d'] = punkty
+                        objPath['d'] = line.replace('d=', '').strip()
+
+    fileR.close()
+
+    # Konwersja i zapisanie obiektu do pliku .js
+    with open(file_path(fileNameJS), mode="w") as fileW: # w : po otwarciu, kasowana jest zawartość
+        fileW.write("export const mrowka = {\n")
+        tabulator = 1
+        konwertuj_obiekt(mrowka, tabulator)
+        fileW.write("\n}\n")
+
 
 
 

@@ -400,7 +400,7 @@
     <g
        inkscape:groupmode="layer"
        id="layer3"
-       inkscape:label="odn1-1"
+       inkscape:label="odn1_1"
        style="display:inline">
       <path
          style="display:inline;fill:#6e4435;fill-opacity:1;stroke:#685347;stroke-width:1px"
@@ -419,7 +419,7 @@
     <g
        inkscape:groupmode="layer"
        id="layer11"
-       inkscape:label="odn1-2"
+       inkscape:label="odn1_2"
        style="display:inline">
       <path
          id="path1518"
@@ -449,7 +449,7 @@
     <g
        inkscape:groupmode="layer"
        id="layer12"
-       inkscape:label="odn1-3"
+       inkscape:label="odn1_3"
        style="display:inline">
       <ellipse
          style="display:inline;fill:none;stroke:#0000ff"
@@ -475,7 +475,7 @@
     <g
        inkscape:groupmode="layer"
        id="layer13"
-       inkscape:label="odn1-4"
+       inkscape:label="odn1_4"
        style="display:inline">
       <ellipse
          style="display:inline;fill:none;stroke:#0000ff"
