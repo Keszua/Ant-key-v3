@@ -27,31 +27,31 @@ def file_path(relative_path):
 
 
 mrowka = {
-    'cialo': {
-        'g1': {'x': 0,  'y': 0},
-        'n1': {'x': 0,  'y': 0},
-        'n2': {'x': 0,  'y': 0},
-        'n3': {'x': 0,  'y': 0},
-        'st': {'x': 0,  'y': 0},
-        'd': [ ],
-    }, 
-    'noga1': {
-        'odn1_1': {
-            'c1': {'x': 0, 'y': 0 },
-            'c2': {'x': 0, 'y': 0 },
-            'path': [ ],
-        },
-        'odn1_2': {
-            'c1': {'x': 0, 'y': 0 },
-            'c2': {'x': 0, 'y': 0 },
-            'path': [],
-        },
-        'odn1_3': {
-            'c1': {'x': 0, 'y': 0 },
-            'c2': {'x': 0, 'y': 0 },
-            'path': [],
-        },
-    },
+    # 'cialo': {
+    #     'gl': {'x': 0,  'y': 0},
+    #     'n1': {'x': 0,  'y': 0},
+    #     'n2': {'x': 0,  'y': 0},
+    #     'n3': {'x': 0,  'y': 0},
+    #     'st': {'x': 0,  'y': 0},
+    #     'd': [ ],
+    # }, 
+    # 'noga1': {
+    #     'odn1_1': {
+    #         'c1': {'x': 0, 'y': 0 },
+    #         'c2': {'x': 0, 'y': 0 },
+    #         'path': [],
+    #     },
+    #     'odn1_2': {
+    #         'c1': {'x': 0, 'y': 0 },
+    #         'c2': {'x': 0, 'y': 0 },
+    #         'path': [],
+    #     },
+    #     'odn1_3': {
+    #         'c1': {'x': 0, 'y': 0 },
+    #         'c2': {'x': 0, 'y': 0 },
+    #         'path': [],
+    #     },
+    # },
 
 }
 
@@ -128,6 +128,8 @@ def selektorStylow(tablica):
 
 for plik in listaPlikow:
     print('plik', plik)
+    mrowka.clear()
+    print('mrowka_1', mrowka )
 
     # fileNameSVG=(f"./../../Robocze/mrowki/{listaPlikow[0]}.svg")
     # fileNameJS=(f"{listaPlikow[0]}.js")
@@ -143,55 +145,101 @@ for plik in listaPlikow:
     licznikPath = 0
     znalezionyLabel = False
     znalezionyPath = False
+    znalezionyEllipse = False
+    znalezionyEllipseC1 = False
+    znalezionyEllipseC2 = False
+    znalezionyEllipseGl = False
+    znalezionyEllipseN1 = False
+    znalezionyEllipseN2 = False
+    znalezionyEllipseN3 = False
+    znalezionyEllipseSt = False
 
     for obNoga in listaNogi:
         # print('obNoga', obNoga)
 
-        for keyNoga in obNoga:
-            # print('keyNoga', keyNoga)
-            
-            for elTab_czlon in obNoga[keyNoga]:
-                # print('elCzlon', elTab_czlon)    
-                objPath =  { 'style': {}, 'd': '' }
-                mrowka[keyNoga] = {elTab_czlon: {} }
-                mrowka[keyNoga][elTab_czlon] = {'path': []}
+        kluczArr = list(obNoga.keys())
+        keyNoga = kluczArr[0]
+        # print('    klucz', keyNoga)
+        mrowka[keyNoga] = {}
 
-                for line in fileR:
-                    if keyNoga in line:
-                        znalezionyLabel = True
-                        
-                    if znalezionyLabel and '</g>' in line:
-                        break
+        obNogaArr = obNoga[keyNoga]
+        for odn in obNogaArr:
+            objPath =  { 'style': {}, 'd': '' }
+            objJoint = {'x': 0, 'y': 0 }
+            # mrowka[keyNoga][odn] = {'c1': {'x': 0, 'y': 0 }, 'c2': {'x': 0, 'y': 0 }, 'path': []}
+            mrowka[keyNoga][odn] = {'path': []}
 
-                    if znalezionyLabel and '<path' in line:
-                        znalezionyPath = True
 
-                    if znalezionyLabel and znalezionyPath and '/>' in line:
-                        znalezionyPath = False
-                        # mrowka['noga1']['odn1_1']['path'].append(objPath)
-                        mrowka[keyNoga][elTab_czlon]['path'].append(objPath)
-                        
-                    if znalezionyLabel and znalezionyPath and 'style=' in line:
-                        lista = line.replace('style=', '').strip().strip('"').split(';')
+            for line in fileR:
+                if keyNoga in line:
+                    znalezionyLabel = True
+                    
+                if znalezionyLabel and '</g>' in line:
+                    break
 
-                        newList = []
-                        for el in lista:
-                            newList.append(el.split(':'))
+                if znalezionyLabel and '<path' in line:
+                    znalezionyPath = True
 
-                        wyselekcjonowaneStyle = []
-                        for el in newList:
-                            wynik = selektorStylow(el)
-                            if wynik:
-                                wyselekcjonowaneStyle.append(wynik)
+                if znalezionyLabel and znalezionyPath and '/>' in line:
+                    znalezionyPath = False
+                    # mrowka['noga1']['odn1_1']['path'].append(objPath)
+                    mrowka[keyNoga][odn]['path'].append(objPath)
+                    print('XX', mrowka)
+                    # objPath.clear()
+                    print('YY', mrowka)
+                    
+                if znalezionyLabel and znalezionyPath and 'style=' in line:
+                    lista = line.replace('style=', '').strip().strip('"').split(';')
 
-                        objStyle = dict(wyselekcjonowaneStyle)
-                        objPath['style'] = objStyle
-                        
+                    newList = []
+                    for el in lista:
+                        newList.append(el.split(':'))
 
-                    if znalezionyLabel and znalezionyPath and ' d=' in line:
-                        # punkty = line.replace('d=', '').strip()
-                        # objPath['d'] = punkty
-                        objPath['d'] = line.replace('d=', '').strip()
+                    wyselekcjonowaneStyle = []
+                    for el in newList:
+                        wynik = selektorStylow(el)
+                        if wynik:
+                            wyselekcjonowaneStyle.append(wynik)
+
+                    objStyle = dict(wyselekcjonowaneStyle)
+                    objPath['style'] = objStyle
+                    
+                if znalezionyLabel and znalezionyPath and ' d=' in line:
+                    # punkty = line.replace('d=', '').strip()
+                    # objPath['d'] = punkty
+                    objPath['d'] = line.replace('d=', '').strip().strip('"')
+
+
+                if znalezionyLabel and '<ellipse' in line:
+                    znalezionyEllipse = True
+
+                if znalezionyLabel and znalezionyEllipse and '/>' in line:
+                    znalezionyEllipse = False
+
+                if znalezionyLabel and znalezionyEllipseC1 and '/>' in line:
+                    znalezionyEllipse = False
+                    znalezionyEllipseC1 = False
+                    mrowka[keyNoga][odn]['c1'] = objJoint
+                    print('dodaj', objJoint)
+
+                if znalezionyLabel and znalezionyEllipse and 'id=' in line:
+                    odczytaneId = line.replace('id=', '').strip().strip('"')[-2:]
+                    if odczytaneId == 'c1': znalezionyEllipseC1 = True
+                    if odczytaneId == 'c2': znalezionyEllipseC2 = True
+                    if odczytaneId == 'gl': znalezionyEllipseGl = True
+                    if odczytaneId == 'n1': znalezionyEllipseN1 = True
+                    if odczytaneId == 'n2': znalezionyEllipseN2 = True
+                    if odczytaneId == 'n3': znalezionyEllipseN3 = True
+                    if odczytaneId == 'st': znalezionyEllipseSt = True
+
+                if znalezionyLabel and znalezionyEllipseC1 and 'cx=' in line:
+                    # objJoint = {'x': 0, 'y': 0 }
+                    objJoint['x'] = line.replace('cx=', '').strip().strip('"')
+
+                if znalezionyLabel and znalezionyEllipseC1 and 'cy=' in line:
+                    objJoint['y'] = line.replace('cy=', '').strip().strip('"')
+
+
 
     fileR.close()
 
