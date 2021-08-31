@@ -183,10 +183,11 @@ for plik in listaPlikow:
                 if znalezionyLabel and znalezionyPath and '/>' in line:
                     znalezionyPath = False
                     # mrowka['noga1']['odn1_1']['path'].append(objPath)
-                    mrowka[keyNoga][odn]['path'].append(objPath)
-                    print('XX', mrowka)
-                    # objPath.clear()
-                    print('YY', mrowka)
+                    # mrowka[keyNoga][odn]['path'].append(objPath)
+                    mrowka[keyNoga][odn]['path'].append({})
+                    le = len(mrowka[keyNoga][odn]['path'])
+                    mrowka[keyNoga][odn]['path'][le-1].update(objPath)
+                    objPath.clear()
                     
                 if znalezionyLabel and znalezionyPath and 'style=' in line:
                     lista = line.replace('style=', '').strip().strip('"').split(';')
