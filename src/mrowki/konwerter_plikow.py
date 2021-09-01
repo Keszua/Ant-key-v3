@@ -146,13 +146,8 @@ for plik in listaPlikow:
     znalezionyLabel = False
     znalezionyPath = False
     znalezionyEllipse = False
-    znalezionyEllipseC1 = False
-    znalezionyEllipseC2 = False
-    znalezionyEllipseGl = False
-    znalezionyEllipseN1 = False
-    znalezionyEllipseN2 = False
-    znalezionyEllipseN3 = False
-    znalezionyEllipseSt = False
+    znalezionyJoint = ''
+
 
     for obNoga in listaNogi:
         # print('obNoga', obNoga)
@@ -217,27 +212,25 @@ for plik in listaPlikow:
                 if znalezionyLabel and znalezionyEllipse and '/>' in line:
                     znalezionyEllipse = False
 
-                if znalezionyLabel and znalezionyEllipseC1 and '/>' in line:
+                if znalezionyLabel and znalezionyJoint and '/>' in line:
                     znalezionyEllipse = False
-                    znalezionyEllipseC1 = False
-                    mrowka[keyNoga][odn]['c1'] = objJoint
-                    print('dodaj', objJoint)
+                    # mrowka[keyNoga][odn][znalezionyJoint] = objJoint
+                    mrowka[keyNoga][odn][znalezionyJoint] = {}
+                    mrowka[keyNoga][odn][znalezionyJoint].update(objJoint)
+                    znalezionyJoint = ''
 
                 if znalezionyLabel and znalezionyEllipse and 'id=' in line:
                     odczytaneId = line.replace('id=', '').strip().strip('"')[-2:]
-                    if odczytaneId == 'c1': znalezionyEllipseC1 = True
-                    if odczytaneId == 'c2': znalezionyEllipseC2 = True
-                    if odczytaneId == 'gl': znalezionyEllipseGl = True
-                    if odczytaneId == 'n1': znalezionyEllipseN1 = True
-                    if odczytaneId == 'n2': znalezionyEllipseN2 = True
-                    if odczytaneId == 'n3': znalezionyEllipseN3 = True
-                    if odczytaneId == 'st': znalezionyEllipseSt = True
 
-                if znalezionyLabel and znalezionyEllipseC1 and 'cx=' in line:
-                    # objJoint = {'x': 0, 'y': 0 }
+                    tupleSzukanychStawow = ('c1', 'c2', 'gl', 'n1', 'n2', 'n3', 'st')
+                    if odczytaneId in tupleSzukanychStawow:
+                        print('zawiera', odczytaneId)
+                        znalezionyJoint = odczytaneId
+
+                if znalezionyLabel and znalezionyJoint and 'cx=' in line:
                     objJoint['x'] = line.replace('cx=', '').strip().strip('"')
 
-                if znalezionyLabel and znalezionyEllipseC1 and 'cy=' in line:
+                if znalezionyLabel and znalezionyJoint and 'cy=' in line:
                     objJoint['y'] = line.replace('cy=', '').strip().strip('"')
 
 
