@@ -2,7 +2,7 @@ import { useEffect, useState, useLayoutEffect } from 'react';
 import { IdrawPath } from './calcPoint';
 import { reDrawArrayPath } from './calcPoint';
 
-import { mrowka } from './7R00_Camponotus_';
+import { mrowka } from './7R00_Camponotus';
 
 //let dCalc1 = "";
 //let dCalc2 = "";
@@ -91,14 +91,13 @@ export const Mrowka2 = (props :any) => {
 
 
     const drawCialo = () => {
-        const array = Object.entries(calosc.cialo.d);
-        CialoPath = array.map( (el, i) => {
-            const param = { id: 0, d: ''}; 
-            param.id = parseFloat(el[0]);
-            param.d = el[1];
-            return param;
-        })
-
+        // const array = Object.entries(calosc.cialo.d);
+        // CialoPath = array.map( (el, i) => {
+        //     const param = { id: 0, d: ''}; 
+        //     param.id = parseFloat(el[0]);
+        //     param.d = el[1];
+        //     return param;
+        // })
     }
 
 
