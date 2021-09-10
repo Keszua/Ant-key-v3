@@ -1,0 +1,89 @@
+  
+/*---------------------- plik _szukaj_mrowki.scss -------------------------*/
+
+.informacje {
+    margin: 10px;
+    padding: 14px;
+
+}
+
+
+.ramka_na_dwa_slidery {
+    display: flex;    
+    flex-direction: column;
+
+    height: 600px;
+    width: 600px;
+    margin: 5%;
+
+}
+
+.ramka_na_slider {
+
+    // display: 'block';
+    background: rgb(41, 40, 40);
+    // margin: 0 25px 0 25px; 
+    //width: 100%;
+
+    &__poziomy{
+        height: 33%;
+        background: rgb(40, 60, 170);
+        
+    }
+
+    &__pionowy {
+        height: 66%;
+        background: green;
+   
+    }
+
+}
+
+
+// .slider {
+//     /*
+//      -webkit-text-size-adjust: 100%;
+//     font: 112.5%/1.45em georgia,serif;
+//     //color: rgba(90,0,0,.8);
+//     font-family: georgia,serif;
+//     //font-weight: 400;
+//     word-wrap: break-word;
+//     font-kerning: normal;
+//     font-feature-settings: "kern","liga","clig","calt","kern";
+//     direction: ltr;
+//     unicode-bidi: isolate;
+//     box-sizing: border-box;
+//     user-select: none;
+//     touch-action: pan-y;
+//     -webkit-tap-highlight-color: transparent;
+//     position: relative;
+//     display: block;
+//     // margin: 30px auto 50px; 
+// */
+//     &__poziomy {
+
+//     }
+// }
+
+
+
+.sl_okienko {
+    height: 100px;
+    width: 200px;
+    background: #5f9ea0;
+    color: #fff;
+    font-size: 16px;
+    // line-height: 100px;
+    //margin: 10px 10px 10px ;
+    // border: 2px;
+    // padding: 14px;
+    // position: relative;
+    text-align: center;
+}
+
+
+
+
+
+
+/*----------------------- end _szukaj_mrowki.scss --------------------------*/
