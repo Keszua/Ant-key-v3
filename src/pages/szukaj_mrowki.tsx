@@ -1,5 +1,9 @@
-import React  from 'react';
-import ReactDOM from 'react-dom';
+import React, { useState}  from 'react';
+//import ReactDOM from 'react-dom';
+
+//var ReactAd = require('react/addons');
+// var React = require('react');
+
 // import './szukaj_mrowki.css';
 //import "~slick-carousel/slick/slick.css"; 
 //import "~slick-carousel/slick/slick-theme.css";
@@ -16,46 +20,91 @@ npm i --save-dev @types/react-slick
 
 
 
+
+// const Item = (props :any) => {
+    
+//     const [level, setLevel] = useState(); 
+    
+//     const className = 'item level' + props.level
+//     return(
+//         <div className={className}>
+//             {props.id}
+//         </div>
+//     )
+   
+// }
+
+// interface Icarusel {
+//     items: any,
+//     active: any,
+//     direction: any,
+// }
+
+// const Carousel = (props :Icarusel) => {
+
+//     const [items, setItems] = useState(props.items);
+//     const [active, setActive] = useState(props.active);
+//     const [direction, setDirection] = useState(props.direction);
+
+//     const generateItems = () => {
+//         var items = []
+//         var level
+//         console.log(active)
+//         for (var i = active - 2; i < active + 3; i++) {
+//             var index = i
+//             if (i < 0) {
+//                 index = items.length + i
+//             } else if (i >= items.length) {
+//                 index = i % items.length
+//             }
+//             level = active - i
+//             items.push(<Item key={index} id={items[index]} level={level} />)
+//         }
+//         return items
+//     }
+
+//     const moveLeft = () => {
+//         let newActive = active
+//         newActive--
+//         // setState({
+//         //     active: newActive < 0 ? items.length - 1 : newActive,
+//         //     direction: 'left'
+//         // })
+//         setActive( newActive < 0 ? items.length - 1 : newActive );
+//         setDirection('left');
+//     }
+
+//     const moveRight = () => {
+//         let newActive = active
+//         // this.setState({
+//         //     active: (newActive + 1) % this.state.items.length,
+//         //     direction: 'right'
+//         // })
+//         setActive( (newActive + 1) % items.length );
+//         setDirection('left');
+//     }
+
+
+//     return(
+//         <div id="carousel" className="noselect">
+//             <div className="arrow arrow-left" onClick={moveLeft}><i className="fi-arrow-left"></i></div>
+//             {/* <ReactCSSTransitionGroup 
+//                 transitionName={direction}>
+//                 {generateItems()}
+//             </ReactCSSTransitionGroup> */}
+//             <div className="arrow arrow-right" onClick={moveRight}><i className="fi-arrow-right"></i></div>
+//         </div>
+//     )
+
+
+// }
+
+
 const SzukajMrowkiPage = () => {
 
 
-    const SampleNextArrow = (props :any) => {
-        const { className, style, onClick } = props;
-        return (
-          <div
-            className={className}
-            // style={{ ...style, display: "block", background: "red" }}
-            style={{ ...style, background: "red" }}
-            onClick={onClick}
-          />
-        );
-      }
-      
-    const SamplePrevArrow = (props :any) => {
-        const { className, style, onClick } = props;
-        console.log('style', style);
-        return (
-            <div
-                className={className}
-                // style={{ ...style, display: "block", background: "green" }}
-                style={{ ...style, background: "green" }}
-                
-                onClick={onClick}
-            />
-        );
-    }
 
 
-    const SliderH_settings = {
-        // className: "center",
-        centerPadding: "20px",
-        // width: '100px',
-        className: "slider variable-width",
-        // variableWidth: true,
-        nextArrow: <SampleNextArrow />,
-        prevArrow: <SamplePrevArrow />
-
-    };
 
 
     const sliderH1 = ['1A', '1B', '1C', '1D', '1E'];
@@ -75,83 +124,17 @@ const SzukajMrowkiPage = () => {
 
                 </svg>
             </div>
-            {/* <div className="ramka_na_dwa_slidery"> */}
+            <div className="ramka_na_dwa_slidery">
             
-                {/* <div className='ramka_na_slider ramka_na_slider__poziomy' > */}
+                <div className='ramka_na_slider ramka_na_slider__poziomy' >
 
-                    <Slider 
-                    //  {...SliderH_settings}
-                        infinite={true}
-                        speed= {500}
-                        slidesToShow= {3}
-                        slidesToScroll= {1}
-                        initialSlide= {0}
-                        centerMode= {true}
-                        // centerPadding = {"20px"}
-                        // variableWidth = {true}
-                        dots= {false}
-                        // beforeChange = {function(currentSlide, nextSlide) {
-                        //     console.log("before change", currentSlide, nextSlide);
-                        // }}
-                        // afterChange= { function(currentSlide) {
-                        //     console.log("after change", currentSlide);
-                        // }}
-                    >
-                            <div className={'sl_okienko'}>
-                                djjkjsdd0
-                                jakiś tekst
-                                <p>fdfljfjf</p>
-                            </div>
-                            <div className={'sl_okienko'}>
-                                <h3>1</h3>jhfdjjdhf
-                            </div>
-                            <div className={'sl_okienko'}>
-                                <h3>2</h3>
-                            </div>
-                            <div className={'sl_okienko'}>
-                                <h3>3</h3>
-                            </div>
-                        <div className={'sl_okienko'}>
-                            <h3>4</h3>
-                        </div>
-                    </Slider>
-                {/* </div> */}
-
-                {/* <div className='ramka_na_slider ramka_na_slider__pionowy' >
-                    <Slider className='slider slider__pionowy'
-                        vertical= {true}
-                        verticalSwiping= {true}
-                        infinite= {true}
-                        slidesToShow= {2}
-                        slidesToScroll= {1}
-                        initialSlide= {0}
-                        speed= {500}
-                        // centerMode= {true}
-                        beforeChange = {function(currentSlide, nextSlide) {
-                            console.log("before change", currentSlide, nextSlide);
-                        }}
-                        afterChange= { function(currentSlide) {
-                            console.log("after change", currentSlide);
-                        }}
+                
                     
-                    >
-                        <div className={'sl_okienko'}>
-                            <div > <h3>A</h3> </div>  
-                            <div> <h3>A</h3> </div>  
-                        </div>
-                        <div className={'sl_okienko'}>
-                            <h3>1</h3>
-                        </div>
-                        <div className={'sl_okienko'}>
-                            <h3>2</h3>
-                        </div>
-                        <div className={'sl_okienko'}>
-                            <h3>3</h3>
-                        </div>
-                    </Slider>
-                </div> */}
+                </div>
+            </div>
 
-            {/* </div>     */}
+ 
+
         </>
     )
 

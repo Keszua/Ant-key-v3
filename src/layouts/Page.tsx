@@ -1,5 +1,5 @@
 import React from 'react';
-import SzukajMrowkiPage from '../pages/szukaj_mrowki'
+import SzukajMrowkiPage from '../pages/szukaj_mrowki2'
 
 const Page = () => {
     return ( 
