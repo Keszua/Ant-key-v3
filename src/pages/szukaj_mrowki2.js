@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef}  from 'react';
 import {gsap} from 'gsap'
-import Draggable from 'react-draggable';
-
-
+import Draggable, {DraggableCore}  from 'react-draggable';
+// import { DragDropContext } from 'react-beautiful-dnd';
+// jakaś dokumentacja: https://www.npmjs.com/package/react-draggable
+// jakiś przykład jak zrobić od podstaw https://www.positronx.io/create-react-draggable-component-with-react-draggable-package/
 
 
 const CarouselB = () => {
@@ -162,26 +163,153 @@ const SzukajMrowkiPage = () => {
     const sliderH1 = ['1A', '1B', '1C', '1D', '1E'];
     const sliderH2 = ['1A', '1B', '1C', '1D', '1E'];
     const sliderW = [sliderH1, sliderH2];
+    const skokPoSiatce = [1, 50];
 
 
-    const [state, setState] = useState(
-        {
-            activeDrags: 0,
-            deltaPosition: {
-            x: 0, y: 0
-            }
-        }
+    // const [state, setState] = useState(
+    //     {
+    //         activeDrags: 0,
+    //         deltaPosition: { x: 0, y: 0 }
+    //     }
+    // )
+
+    // const [stateA1, setStateA1] = useState(
+    //     {  deltaXyPos: { x: 0, y: 0 } }
+    // )
+
+    // const [stateA2, setStateA2] = useState(
+    //     {  deltaXyPos: { x: 0, y: 0 } }
+    // )
+
+    // const [stateA3, setStateA3] = useState(
+    //     {  deltaXyPos: { x: 0, y: 0 } }
+    // )
+
+    // const [stateB2, setStateB2] = useState(
+    //     {  deltaXyPos: { x: 0, y: 0 } }
+    // )
+
+    
+    // const handleDrag = (e, d) => {
+    //     const { x, y } = stateA1.deltaXyPos;
+    //     setStateA1({
+    //         deltaXyPos: {
+    //             x: x + d.deltaX,
+    //             y: y + d.deltaY,
+    //         }
+    //     });
+    // };
+    
+    const [stateRowA, setStateRowA] = useState(
+        {  pos: { x: 0, y: 0 } }
     )
 
-    const onStart = () => {
-        setState({activeDrags: ++state.activeDrags});
-    };
-    
-    const onStop = () => {
-        setState({activeDrags: --state.activeDrags});
+    const handleDragRowA = (e, d) => {
+        setStateRowA({
+            pos: {
+                x: stateRowA.pos.x + d.deltaX,
+                y: stateRowA.pos.y + d.deltaY,
+            }
+        });
+        setStateRowB({
+          pos: {
+            x: stateRowB.pos.x,
+            y: stateRowB.pos.y + d.deltaY,
+          }
+        });
+        setStateRowC({
+          pos: {
+            x: stateRowC.pos.x,
+            y: stateRowC.pos.y + d.deltaY,
+          }
+        });
     };
 
-    const dragHandlers = {onStart: onStart, onStop: onStop};
+    const [stateRowB, setStateRowB] = useState(
+        {  pos: { x: 0, y: 0 } }
+    )
+
+    const handleDragRowB = (e, d) => {
+        setStateRowA({
+          pos: {
+            x: stateRowA.pos.x,
+            y: stateRowA.pos.y + d.deltaY,
+          }
+        });
+        setStateRowB({
+          pos: {
+            x: stateRowB.pos.x + d.deltaX,
+            y: stateRowB.pos.y + d.deltaY,
+          }
+        });
+        setStateRowC({
+            pos: {
+              x: stateRowC.pos.x,
+              y: stateRowC.pos.y + d.deltaY,
+            }
+          });
+      };
+
+    const [stateRowC, setStateRowC] = useState(
+        {  pos: { x: 0, y: 0 } }
+    )
+
+    const handleDragRowC = (e, d) => {
+        setStateRowA({
+          pos: {
+            x: stateRowA.pos.x,
+            y: stateRowA.pos.y + d.deltaY,
+          }
+        });
+        setStateRowB({
+          pos: {
+            x: stateRowB.pos.x,
+            y: stateRowB.pos.y + d.deltaY,
+          }
+        });
+        setStateRowC({
+          pos: {
+            x: stateRowC.pos.x + d.deltaX,
+            y: stateRowC.pos.y + d.deltaY,
+          }
+        });
+    };
+
+
+
+    // const { deltaXyPos } = stateA1;
+
+
+
+    // const onStart = () => {
+    //     setState({activeDrags: ++state.activeDrags});
+    // };
+    
+    // const onStop = () => {
+    //     setState({activeDrags: --state.activeDrags});
+    // };
+
+    // const dragHandlers = {onStart: onStart, onStop: onStop};
+
+
+    const onBeforeCapture = () => {
+        /*...*/
+    };
+    
+    const onBeforeDragStart = () => {
+        /*...*/
+      };
+    
+    const onDragStart = () => {
+        /*...*/
+      };
+    const onDragUpdate = () => {
+        /*...*/
+      };
+    const onDragEnd = () => {
+        // the only one that is required
+      };
+
 
 
     return ( 
@@ -196,38 +324,150 @@ const SzukajMrowkiPage = () => {
 
                 </svg>
             </div>
-            <div className="ramka_na_dwa_slidery">
-            
-                <div className='ramka_na_slider ramka_na_slider__poziomy' >
-                    <Draggable bounds="parent" {...dragHandlers}>
-                        <div className="box">
-                            Element 1<br/>
-                            
-                        </div>
-                    </Draggable>
-                    <Draggable bounds="parent" {...dragHandlers}>
-                        <div className="box">
-                            Element 2<br/>
-                            
-                        </div>
-                    </Draggable>
-                    <Draggable bounds="parent" {...dragHandlers}>
-                        <div className="box">
-                            Element 3<br/>
-                            
-                        </div>
 
+            {/* <Draggable
+                // axis="x"
+                handle=".handle"
+                defaultPosition={{x: 220, y: 0}}
+                position={null}
+                grid={[5, 25]}
+                scale={1}
+                //onStart={handleStart}
+                onDrag={handleDrag}
+                // onStop={handleStop}
+                  //onMouseDown = {(e: MouseEvent) => void}
+                //onMouseDown = {(e) => {}}
+                //onMouseUp
+                //onTouchEnd
 
-
-                    </Draggable>
-
-                  
+            >
+                <div>
+                    <div className="box handle">Drag from here</div>
+                    <div>This readme is really dragging on...</div>
+                    <div>
+                        <strong>x: {stateA1.deltaXyPos.x.toFixed(0)}, </strong>
+                        <strong>y: {stateA1.deltaXyPos.y.toFixed(0)}</strong>
+                    </div>
                 </div>
-            
-                <div className='ramka_na_slider ramka_na_slider__pionowy' >
+            </Draggable> */}
 
+
+            <div className="ramka_na_slider">
+            
+                <div className='ramka_na_slider__gora' > </div>
+            
+                <div className='ramka_na_slider__srodek' >
+                    <Draggable bounds="parent"
+                        position={ {x: stateRowA.pos.x, y: stateRowA.pos.y }}
+                        onDrag={handleDragRowA}
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            Element A1<br/>
+                            
+                        </div>
+                    </Draggable>
+
+                    <Draggable bounds="parent"
+                        position={ {x: stateRowA.pos.x, y: stateRowA.pos.y }}
+                        onDrag={handleDragRowA}
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            Element A2<br/>
+                            
+                        </div>
+                    </Draggable>
+
+                    <Draggable bounds="parent"
+                        position={ {x: stateRowA.pos.x, y: stateRowA.pos.y }}
+                        onDrag={handleDragRowA}
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            Element A3<br/>
+
+                        </div>
+                    </Draggable>
+
+
+                    <Draggable bounds="parent" 
+                        position={ {x: stateRowB.pos.x, y: stateRowB.pos.y }}
+                        onDrag={handleDragRowB}
+                        //axis="y"
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            Element B1<br/>
+                            
+                        </div>
+                    </Draggable>
+
+                    <Draggable bounds="parent" 
+                        position={ {x: stateRowB.pos.x, y: stateRowB.pos.y }}
+                        onDrag={handleDragRowB}
+                        //axis="y"
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box box__select">
+                            Element B2<br/>
+                            
+                        </div>
+                    </Draggable>
                     
+                    <Draggable bounds="parent" 
+                        position={ {x: stateRowB.pos.x, y: stateRowB.pos.y }}
+                        onDrag={handleDragRowB}
+                        //axis="y"
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            Element B3<br/>
+                            
+                        </div>
+                    </Draggable>
+
+
+                    <Draggable bounds="parent" 
+                        position={ {x: stateRowC.pos.x, y: stateRowC.pos.y }}
+                        onDrag={handleDragRowC}
+                        //axis="y"
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            Element C1<br/>
+                            
+                        </div>
+                    </Draggable>
+
+                    <Draggable bounds="parent" 
+                        position={ {x: stateRowC.pos.x, y: stateRowC.pos.y }}
+                        onDrag={handleDragRowC}
+                        //axis="y"
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box box__select">
+                            Element C2<br/>
+                            
+                        </div>
+                    </Draggable>
+                    
+                    <Draggable bounds="parent" 
+                        position={ {x: stateRowC.pos.x, y: stateRowC.pos.y }}
+                        onDrag={handleDragRowC}
+                        //axis="y"
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            Element C3<br/>
+                            
+                        </div>
+                    </Draggable>
                 </div>
+
+                <div className='ramka_na_slider__lewo' > </div>
+                <div className='ramka_na_slider__prawo' > </div>
+                <div className='ramka_na_slider__dol' > </div>
 
             
 

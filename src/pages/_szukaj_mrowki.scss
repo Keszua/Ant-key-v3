@@ -8,36 +8,81 @@
 }
 
 
-.ramka_na_dwa_slidery {
-    display: flex;    
-    flex-direction: column;
+// .ramka_na_dwa_slidery {
+//     display: flex;    
+//     flex-direction: column;
 
-    height: 600px;
-    width: 600px;
-    margin: 5%;
+//     height: 900px;
+//     width: 600px;
+//     margin: 5%;
 
-}
+// }
+
+$kolorRamki: rgb(41, 40, 40);
 
 .ramka_na_slider {
+    display: grid;
 
-    // display: 'block';
+    height: 700px;
+    width: 700px;
+
+    // // display: 'block';
     background: rgb(41, 40, 40);
-    // margin: 0 25px 0 25px; 
-    //width: 100%;
-    position: relative;
-    // overflow: auto;
+    // // margin: 0 25px 0 25px; 
+    // //width: 100%;
+    // position: relative;
+    // // overflow: auto;
 
-    &__poziomy{
-        height: 33%;
-        background: rgb(40, 60, 170);
-        
-    }
-
-    &__pionowy {
-        height: 66%;
-        background: green;
+    // &__poziomy{
+    //     height: 25%;
+    //     background: rgb(40, 60, 170);
+    //     z-index: 1;
+    // }
+    
+    // &__pionowy {
+    //     height: 75%;
+    //     background: green;
    
-    }
+    // }
+
+    grid-template-columns: 50px auto  50px;	//definiuje 3 kolumny
+    grid-template-rows:	50px 600px  50px ;	//definiuje 3 wiersze
+    grid-template-areas:
+        "gora		gora	    gora"
+        "lewo		srodek		prawo"
+        "dol		dol		    dol" ;
+//powyżej nazywam wszystkie komorki. Jak nie che dawać nazwy, daje kropkę. Muszę tworzyć prostokąty
+        &__gora {
+            grid-area: gora;
+            background: $kolorRamki;
+            z-index: 1;
+
+        }
+        
+        &__srodek {
+            grid-area: srodek;
+            display: 'block';
+            height: 600px;
+            width: 600px;
+        }
+        
+        &__lewo {
+            grid-area: lewo;
+            z-index: 1;
+            background: $kolorRamki;
+        }
+
+        &__prawo {
+            grid-area: prawo;
+            z-index: 1;
+            background: $kolorRamki;
+        }
+
+        &__dol {
+            grid-area: dol;
+            z-index: 1;
+            background: $kolorRamki;
+        }
 
 }
 
@@ -94,6 +139,11 @@
     margin: 10px;
     padding: 10px;
     float: left;
+
+    &__select {
+        border: 5px solid #999;
+        border-color: greenyellow;
+    }
   }
 
 
