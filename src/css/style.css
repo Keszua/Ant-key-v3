@@ -16,17 +16,22 @@ html {
   padding: 14px;
 }
 
-.ramka_na_slider {
+.okno_wyboru {
   display: -ms-grid;
   display: grid;
-  height: 700px;
-  width: 700px;
+  width: 650px;
   background: #292828;
-  -ms-grid-columns: 50px auto  50px;
-      grid-template-columns: 50px auto  50px;
-  -ms-grid-rows: 50px 600px  50px;
-      grid-template-rows: 50px 600px  50px;
+  -ms-grid-columns: 25px 600px 25px;
+      grid-template-columns: 25px 600px 25px;
+  -ms-grid-rows: 25px 600px 25px;
+      grid-template-rows: 25px 600px 25px;
       grid-template-areas: "gora		gora	    gora" "lewo		srodek		prawo" "dol		dol		    dol";
+  overflow: hidden;
+}
+
+.ramka_na_slider {
+  background: #292828;
+  z-index: 1;
 }
 
 .ramka_na_slider__gora {
@@ -35,32 +40,38 @@ html {
   -ms-grid-column-span: 3;
   grid-area: gora;
   background: #292828;
-  z-index: 1;
+  overflow: hidden;
+  z-index: 2;
 }
 
 .ramka_na_slider__srodek {
+  width: 1000px;
+  height: 1000px;
   -ms-grid-row: 2;
   -ms-grid-column: 2;
   grid-area: srodek;
+  position: relative;
   display: 'block';
-  height: 600px;
-  width: 600px;
+  overflow: hidden;
+  background: #281669;
+  top: -200px;
+  left: -200px;
 }
 
 .ramka_na_slider__lewo {
   -ms-grid-row: 2;
   -ms-grid-column: 1;
   grid-area: lewo;
-  z-index: 1;
-  background: #292828;
+  -webkit-box-shadow: 25px 0px 35px 20px #292828;
+          box-shadow: 25px 0px 35px 20px #292828;
 }
 
 .ramka_na_slider__prawo {
   -ms-grid-row: 2;
   -ms-grid-column: 3;
   grid-area: prawo;
-  z-index: 1;
-  background: #292828;
+  -webkit-box-shadow: -25px 0px 35px 20px #292828;
+          box-shadow: -25px 0px 35px 20px #292828;
 }
 
 .ramka_na_slider__dol {
@@ -68,8 +79,6 @@ html {
   -ms-grid-column: 1;
   -ms-grid-column-span: 3;
   grid-area: dol;
-  z-index: 1;
-  background: #292828;
 }
 
 .sl_okienko {
@@ -83,17 +92,18 @@ html {
 
 .box {
   background: #fff;
-  border: 1px solid #999;
-  border-radius: 3px;
-  width: 180px;
-  height: 180px;
-  margin: 10px;
-  padding: 10px;
+  border: 2px solid #999;
+  border-radius: 15px;
+  margin: 5px;
+  width: 190px;
+  height: 190px;
+  padding: 5px;
   float: left;
+  position: relative;
 }
 
 .box__select {
-  border: 5px solid #999;
+  border: 4px solid #999;
   border-color: greenyellow;
 }
 

@@ -20,68 +20,59 @@
 
 $kolorRamki: rgb(41, 40, 40);
 
-.ramka_na_slider {
+.okno_wyboru {
     display: grid;
+    //height: 700px;
+    width: 650px;
+    background: $kolorRamki;
 
-    height: 700px;
-    width: 700px;
-
-    // // display: 'block';
-    background: rgb(41, 40, 40);
-    // // margin: 0 25px 0 25px; 
-    // //width: 100%;
-    // position: relative;
-    // // overflow: auto;
-
-    // &__poziomy{
-    //     height: 25%;
-    //     background: rgb(40, 60, 170);
-    //     z-index: 1;
-    // }
-    
-    // &__pionowy {
-    //     height: 75%;
-    //     background: green;
-   
-    // }
-
-    grid-template-columns: 50px auto  50px;	//definiuje 3 kolumny
-    grid-template-rows:	50px 600px  50px ;	//definiuje 3 wiersze
+    grid-template-columns: 25px 600px 25px;	   //definiuje 3 kolumny
+    grid-template-rows:	   25px 600px 25px ;   //definiuje 3 wiersze
     grid-template-areas:
         "gora		gora	    gora"
         "lewo		srodek		prawo"
         "dol		dol		    dol" ;
-//powyżej nazywam wszystkie komorki. Jak nie che dawać nazwy, daje kropkę. Muszę tworzyć prostokąty
+
+    overflow: hidden;
+}
+
+.ramka_na_slider {
+
+    background: $kolorRamki;
+    z-index: 1;
+    
         &__gora {
             grid-area: gora;
             background: $kolorRamki;
-            z-index: 1;
-
+            overflow: hidden;
+            z-index: 2;
         }
         
         &__srodek {
+            width: 1000px;
+            height: 1000px;
             grid-area: srodek;
-            display: 'block';
-            height: 600px;
-            width: 600px;
+            position: relative;
+            display: 'block'; 
+            overflow: hidden;
+            //z-index: 0;
+            background: rgb(40, 22, 105);
+            top: -200px;
+            left: -200px;
         }
         
         &__lewo {
             grid-area: lewo;
-            z-index: 1;
-            background: $kolorRamki;
+            box-shadow: 25px 0px 35px 20px $kolorRamki
         }
-
+        
         &__prawo {
             grid-area: prawo;
-            z-index: 1;
-            background: $kolorRamki;
+            box-shadow: -25px 0px 35px 20px $kolorRamki
         }
 
         &__dol {
             grid-area: dol;
-            z-index: 1;
-            background: $kolorRamki;
         }
 
 }
@@ -132,16 +123,20 @@ $kolorRamki: rgb(41, 40, 40);
 
 .box {
     background: #fff;
-    border: 1px solid #999;
-    border-radius: 3px;
-    width: 180px;
-    height: 180px;
-    margin: 10px;
-    padding: 10px;
+    border: 2px solid #999;
+    border-radius: 15px;
+    margin: 5px;
+    width: 190px;
+    height: 190px;
+    padding: 5px;
     float: left;
 
+    position: relative;
+    //top: -100px;
+    //left: -100px;
+
     &__select {
-        border: 5px solid #999;
+        border: 4px solid #999;
         border-color: greenyellow;
     }
   }

@@ -153,41 +153,18 @@ const CarouselB = () => {
 
 }
 
+let momentWykryciaGranicy = {x:0, y:0};
+let trwaAnimacja = false;
+let timerAnimacjaWPrawo = null;
+
+
 const SzukajMrowkiPage = () => {
-
-
-
-
-
 
     const sliderH1 = ['1A', '1B', '1C', '1D', '1E'];
     const sliderH2 = ['1A', '1B', '1C', '1D', '1E'];
     const sliderW = [sliderH1, sliderH2];
-    const skokPoSiatce = [1, 50];
+    const skokPoSiatce = [1, 60];
 
-
-    // const [state, setState] = useState(
-    //     {
-    //         activeDrags: 0,
-    //         deltaPosition: { x: 0, y: 0 }
-    //     }
-    // )
-
-    // const [stateA1, setStateA1] = useState(
-    //     {  deltaXyPos: { x: 0, y: 0 } }
-    // )
-
-    // const [stateA2, setStateA2] = useState(
-    //     {  deltaXyPos: { x: 0, y: 0 } }
-    // )
-
-    // const [stateA3, setStateA3] = useState(
-    //     {  deltaXyPos: { x: 0, y: 0 } }
-    // )
-
-    // const [stateB2, setStateB2] = useState(
-    //     {  deltaXyPos: { x: 0, y: 0 } }
-    // )
 
     
     // const handleDrag = (e, d) => {
@@ -223,32 +200,117 @@ const SzukajMrowkiPage = () => {
             y: stateRowC.pos.y + d.deltaY,
           }
         });
+        setStateRowD({
+            pos: {
+              x: stateRowD.pos.x,
+              y: stateRowD.pos.y + d.deltaY,
+            }
+        });
+        setStateRowE({
+            pos: {
+                x: stateRowE.pos.x,
+                y: stateRowE.pos.y + d.deltaY,
+            }
+        });
+
     };
 
-    const [stateRowB, setStateRowB] = useState(
-        {  pos: { x: 0, y: 0 } }
-    )
+    const [stateRowB, setStateRowB] = useState({
+        pos: { x: 0, y: 0 },
+        dragable: true,
+        scale: 1,
+    })
+
 
     const handleDragRowB = (e, d) => {
+
+        console.log('A');
+
         setStateRowA({
           pos: {
             x: stateRowA.pos.x,
             y: stateRowA.pos.y + d.deltaY,
           }
         });
-        setStateRowB({
-          pos: {
-            x: stateRowB.pos.x + d.deltaX,
-            y: stateRowB.pos.y + d.deltaY,
-          }
-        });
+
+        setStateRowB( (prev) => ({  
+            ...prev, 
+            pos: { x: stateRowB.pos.x + d.deltaX, y: stateRowB.pos.y + d.deltaY } 
+        }));
+
         setStateRowC({
             pos: {
               x: stateRowC.pos.x,
               y: stateRowC.pos.y + d.deltaY,
             }
-          });
-      };
+        });
+        setStateRowD({
+            pos: {
+              x: stateRowD.pos.x,
+              y: stateRowD.pos.y + d.deltaY,
+            }
+        });
+        setStateRowE({
+            pos: {
+                x: stateRowE.pos.x,
+                y: stateRowE.pos.y + d.deltaY,
+            }
+        });
+  
+        // setResizeIcon( (prev) => ({ ...prev, save:    {active: false, color: 'black'}  }) )
+
+        if( stateRowB.pos.x > 50) {
+            //przesunRzadB();
+            momentWykryciaGranicy.x = stateRowB.pos.x;
+            momentWykryciaGranicy.y = stateRowB.pos.y;
+
+            console.log('wykrycie x=', momentWykryciaGranicy.x, ' y=', momentWykryciaGranicy.y, 'trwaAnimacja', trwaAnimacja);
+            //trwaAnimacja = true;
+            console.log('timerAnimacjaWPrawo', timerAnimacjaWPrawo);
+            if(timerAnimacjaWPrawo === null) {
+                timerAnimacjaWPrawo = setInterval( () => {
+                    //timerAnimacjaWPrawo = null;
+                    console.log('timer Interwal x', stateRowB.pos.x, 'y', stateRowB.pos.y);
+                    setStateRowB( (prev) => {
+                        if(prev.pos.x > 200) {
+                            clearInterval(timerAnimacjaWPrawo);
+                            timerAnimacjaWPrawo = null;
+                        }
+                        return {  
+                            ...prev, 
+                            pos: { x: prev.pos.x + 5, y: stateRowB.pos.y } 
+                        }
+                    });
+                    
+                }, 100)
+            }
+
+            setStateRowB( (prev) => ({  
+                ...prev, 
+                scale: 100, 
+            }));
+        } else {
+            setStateRowB( (prev) => ({  
+                ...prev, 
+                scale: 1, 
+            }));
+        }
+
+        if (trwaAnimacja) {
+
+        }
+    };
+
+
+
+    const przesunRzadB = () => {
+        console.log('x', stateRowB.pos.x, 'y', stateRowB.pos.y);
+        setStateRowB( (prev) => ({  
+            ...prev, 
+            dragable: false,
+        }));
+    }
+
 
     const [stateRowC, setStateRowC] = useState(
         {  pos: { x: 0, y: 0 } }
@@ -273,8 +335,95 @@ const SzukajMrowkiPage = () => {
             y: stateRowC.pos.y + d.deltaY,
           }
         });
+        setStateRowD({
+            pos: {
+              x: stateRowD.pos.x,
+              y: stateRowD.pos.y + d.deltaY,
+            }
+        });
+        setStateRowE({
+            pos: {
+                x: stateRowE.pos.x,
+                y: stateRowE.pos.y + d.deltaY,
+            }
+        });
+  
     };
 
+    const [stateRowD, setStateRowD] = useState(
+        {  pos: { x: 0, y: 0 } }
+    )
+
+    const handleDragRowD = (e, d) => {
+        setStateRowA({
+          pos: {
+            x: stateRowA.pos.x,
+            y: stateRowA.pos.y + d.deltaY,
+          }
+        });
+        setStateRowB({
+          pos: {
+            x: stateRowB.pos.x,
+            y: stateRowB.pos.y + d.deltaY,
+          }
+        });
+        setStateRowC({
+          pos: {
+            x: stateRowC.pos.x,
+            y: stateRowC.pos.y + d.deltaY,
+          }
+        });
+        setStateRowD({
+            pos: {
+                x: stateRowD.pos.x + d.deltaX,
+                y: stateRowD.pos.y + d.deltaY,
+            }
+        });
+        setStateRowE({
+            pos: {
+                x: stateRowE.pos.x,
+                y: stateRowE.pos.y + d.deltaY,
+            }
+        });
+  
+    };
+
+    const [stateRowE, setStateRowE] = useState(
+        {  pos: { x: 0, y: 0 } }
+    )
+
+    const handleDragRowE = (e, d) => {
+        setStateRowA({
+          pos: {
+            x: stateRowA.pos.x,
+            y: stateRowA.pos.y + d.deltaY,
+          }
+        });
+        setStateRowB({
+          pos: {
+            x: stateRowB.pos.x,
+            y: stateRowB.pos.y + d.deltaY,
+          }
+        });
+        setStateRowC({
+          pos: {
+            x: stateRowC.pos.x,
+            y: stateRowC.pos.y + d.deltaY,
+          }
+        });
+        setStateRowD({
+            pos: {
+                x: stateRowD.pos.x,
+                y: stateRowD.pos.y + d.deltaY,
+            }
+        });
+        setStateRowE({
+            pos: {
+                x: stateRowE.pos.x + d.deltaX,
+                y: stateRowE.pos.y + d.deltaY,
+            }
+        });
+    };
 
 
     // const { deltaXyPos } = stateA1;
@@ -310,7 +459,12 @@ const SzukajMrowkiPage = () => {
         // the only one that is required
       };
 
-
+    // useEffect(() => {
+    //     //initPoition();
+    //     return () => {
+    //     //setArticleList([])
+    //     };
+    // }, []);
 
     return ( 
         <>
@@ -352,44 +506,79 @@ const SzukajMrowkiPage = () => {
             </Draggable> */}
 
 
-            <div className="ramka_na_slider">
+            <div className="okno_wyboru">
             
-                <div className='ramka_na_slider__gora' > </div>
+                <div className='ramka_na_slider ramka_na_slider__gora' > </div>
             
-                <div className='ramka_na_slider__srodek' >
+                <div className='ramka_na_slider ramka_na_slider__srodek' >
+
+                    {/* ------------------------- Pierwszy rząd ------------------------- */}
                     <Draggable bounds="parent"
                         position={ {x: stateRowA.pos.x, y: stateRowA.pos.y }}
                         onDrag={handleDragRowA}
                         grid={skokPoSiatce}
                     >
                         <div className="box">
-                            Element A1<br/>
+                            Element A-2<br/>
+                        </div>
+                    </Draggable>
+
+                    <Draggable bounds="parent"
+                        position={ {x: stateRowA.pos.x, y: stateRowA.pos.y }}
+                        onDrag={handleDragRowA}
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            Element A-1<br/>
+                        </div>
+                    </Draggable>
+
+                    <Draggable bounds="parent"
+                        position={ {x: stateRowA.pos.x, y: stateRowA.pos.y } }
+                        onDrag={handleDragRowA}
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            Element A 0<br/>
+
+                        </div>
+                    </Draggable>
+
+                    <Draggable bounds="parent"
+                        position={ {x: stateRowA.pos.x, y: stateRowA.pos.y } }
+                        onDrag={handleDragRowA}
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            Element A 1<br/>
+
+                        </div>
+                    </Draggable>
+
+                    <Draggable bounds="parent"
+                        position={ {x: stateRowA.pos.x, y: stateRowA.pos.y } }
+                        onDrag={handleDragRowA}
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            Element A 2<br/>
+
+                        </div>
+                    </Draggable>
+
+
+                    {/* -------------------------   Drugi rząd  ------------------------- */}
+                    <Draggable bounds="parent" 
+                        position={ {x: stateRowB.pos.x, y: stateRowB.pos.y }}
+                        onDrag={handleDragRowB}
+                        //axis="y"
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            Element B-2<br/>
                             
                         </div>
                     </Draggable>
-
-                    <Draggable bounds="parent"
-                        position={ {x: stateRowA.pos.x, y: stateRowA.pos.y }}
-                        onDrag={handleDragRowA}
-                        grid={skokPoSiatce}
-                    >
-                        <div className="box">
-                            Element A2<br/>
-                            
-                        </div>
-                    </Draggable>
-
-                    <Draggable bounds="parent"
-                        position={ {x: stateRowA.pos.x, y: stateRowA.pos.y }}
-                        onDrag={handleDragRowA}
-                        grid={skokPoSiatce}
-                    >
-                        <div className="box">
-                            Element A3<br/>
-
-                        </div>
-                    </Draggable>
-
 
                     <Draggable bounds="parent" 
                         position={ {x: stateRowB.pos.x, y: stateRowB.pos.y }}
@@ -398,20 +587,26 @@ const SzukajMrowkiPage = () => {
                         grid={skokPoSiatce}
                     >
                         <div className="box">
-                            Element B1<br/>
+                            Element B-1<br/>
                             
                         </div>
                     </Draggable>
 
                     <Draggable bounds="parent" 
+                        //handle={stateRowB.handle}
+                        scale={stateRowB.scale}
                         position={ {x: stateRowB.pos.x, y: stateRowB.pos.y }}
-                        onDrag={handleDragRowB}
+                        // onDrag={ stateRowB.dragable ? handleDragRowB : ()=>{} }
+                        onDrag={ handleDragRowB }
                         //axis="y"
                         grid={skokPoSiatce}
+                        
                     >
                         <div className="box box__select">
-                            Element B2<br/>
-                            
+                            Element B 0<br/>
+                            Pos.x={stateRowB.pos.x},<br/>
+                            Pos.y={stateRowB.pos.y},<br/>
+
                         </div>
                     </Draggable>
                     
@@ -422,12 +617,60 @@ const SzukajMrowkiPage = () => {
                         grid={skokPoSiatce}
                     >
                         <div className="box">
-                            Element B3<br/>
+                            Element B 1<br/>
                             
                         </div>
                     </Draggable>
 
+                    <Draggable bounds="parent" 
+                        position={ {x: stateRowB.pos.x, y: stateRowB.pos.y }}
+                        onDrag={handleDragRowB}
+                        //axis="y"
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            Element B 2<br/>
+                            
+                        </div>
+                    </Draggable>
 
+                    {/* -------------------------  Trzeci rząd  ------------------------- */}
+                    <Draggable bounds="parent" 
+                        position={ {x: stateRowC.pos.x, y: stateRowC.pos.y }}
+                        onDrag={handleDragRowC}
+                        //axis="y"
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            Element C-2<br/>
+                            
+                        </div>
+                    </Draggable>
+
+                    <Draggable bounds="parent" 
+                        position={ {x: stateRowC.pos.x, y: stateRowC.pos.y }}
+                        onDrag={handleDragRowC}
+                        //axis="y"
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            Element C-1<br/>
+                            
+                        </div>
+                    </Draggable>
+
+                    <Draggable bounds="parent" 
+                        position={ {x: stateRowC.pos.x, y: stateRowC.pos.y }}
+                        onDrag={handleDragRowC}
+                        //axis="y"
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box box__select">
+                            Element C 0<br/>
+                            
+                        </div>
+                    </Draggable>
+                    
                     <Draggable bounds="parent" 
                         position={ {x: stateRowC.pos.x, y: stateRowC.pos.y }}
                         onDrag={handleDragRowC}
@@ -446,28 +689,140 @@ const SzukajMrowkiPage = () => {
                         //axis="y"
                         grid={skokPoSiatce}
                     >
-                        <div className="box box__select">
+                        <div className="box">
                             Element C2<br/>
+                            
+                        </div>
+                    </Draggable>
+
+                    {/* -------------------------  Czwarty rząd  ------------------------- */}
+                    <Draggable bounds="parent" 
+                        position={ {x: stateRowD.pos.x, y: stateRowD.pos.y }}
+                        onDrag={handleDragRowD}
+                        //axis="y"
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            Element D-2<br/>
+                            
+                        </div>
+                    </Draggable>
+
+                    <Draggable bounds="parent" 
+                        position={ {x: stateRowD.pos.x, y: stateRowD.pos.y }}
+                        onDrag={handleDragRowD}
+                        //axis="y"
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            Element D-1<br/>
+                            
+                        </div>
+                    </Draggable>
+
+                    <Draggable bounds="parent" 
+                        position={ {x: stateRowD.pos.x, y: stateRowD.pos.y }}
+                        onDrag={handleDragRowD}
+                        //axis="y"
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box box__select">
+                            Element D 0<br/>
                             
                         </div>
                     </Draggable>
                     
                     <Draggable bounds="parent" 
-                        position={ {x: stateRowC.pos.x, y: stateRowC.pos.y }}
-                        onDrag={handleDragRowC}
+                        position={ {x: stateRowD.pos.x, y: stateRowD.pos.y }}
+                        onDrag={handleDragRowD}
                         //axis="y"
                         grid={skokPoSiatce}
                     >
                         <div className="box">
-                            Element C3<br/>
+                            Element D 1<br/>
                             
                         </div>
                     </Draggable>
+
+                    <Draggable bounds="parent" 
+                        position={ {x: stateRowD.pos.x, y: stateRowD.pos.y }}
+                        onDrag={handleDragRowD}
+                        //axis="y"
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            Element D 2<br/>
+                            
+                        </div>
+                    </Draggable>
+
+                    {/* -------------------------   Piąty rząd  ------------------------- */}
+                    <Draggable bounds="parent" 
+                        position={ {x: stateRowE.pos.x, y: stateRowE.pos.y }}
+                        onDrag={handleDragRowE}
+                        //axis="y"
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            Element E-2<br/>
+                            
+                        </div>
+                    </Draggable>
+
+                    <Draggable bounds="parent" 
+                        position={ {x: stateRowE.pos.x, y: stateRowE.pos.y }}
+                        onDrag={handleDragRowE}
+                        //axis="y"
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            Element E-1<br/>
+                            
+                        </div>
+                    </Draggable>
+
+                    <Draggable bounds="parent" 
+                        position={ {x: stateRowE.pos.x, y: stateRowE.pos.y }}
+                        onDrag={handleDragRowE}
+                        //axis="y"
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            Element E 0<br/>
+                            
+                        </div>
+                    </Draggable>
+                    
+                    <Draggable bounds="parent" 
+                        position={ {x: stateRowE.pos.x, y: stateRowE.pos.y }}
+                        onDrag={handleDragRowE}
+                        //axis="y"
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            Element E1<br/>
+                            
+                        </div>
+                    </Draggable>
+
+                    <Draggable bounds="parent" 
+                        position={ {x: stateRowE.pos.x, y: stateRowE.pos.y }}
+                        onDrag={handleDragRowE}
+                        //axis="y"
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            Element E2<br/>
+                            
+                        </div>
+                    </Draggable>
+
+
                 </div>
 
-                <div className='ramka_na_slider__lewo' > </div>
-                <div className='ramka_na_slider__prawo' > </div>
-                <div className='ramka_na_slider__dol' > </div>
+                <div className='ramka_na_slider ramka_na_slider__lewo' > </div>
+                <div className='ramka_na_slider ramka_na_slider__prawo' > </div>
+                <div className='ramka_na_slider ramka_na_slider__dol' > </div>
 
             
 
