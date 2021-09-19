@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef}  from 'react';
 import {gsap} from 'gsap'
-import Draggable, {DraggableCore}  from 'react-draggable';
+import Draggable  from 'react-draggable';
 // import { DragDropContext } from 'react-beautiful-dnd';
 // jakaś dokumentacja: https://www.npmjs.com/package/react-draggable
 // jakiś przykład jak zrobić od podstaw https://www.positronx.io/create-react-draggable-component-with-react-draggable-package/
@@ -154,16 +154,18 @@ const CarouselB = () => {
 }
 
 let momentWykryciaGranicy = {x:0, y:0};
-let trwaAnimacja = false;
-let timerAnimacjaWPrawo = null;
+//let trwaAnimacja = false;
+let timerAnimacjaHoryzontalna = null;
+let timerAnimacjaVertykalna = null;
+
 
 
 const SzukajMrowkiPage = () => {
 
     const sliderH1 = ['1A', '1B', '1C', '1D', '1E'];
     const sliderH2 = ['1A', '1B', '1C', '1D', '1E'];
-    const sliderW = [sliderH1, sliderH2];
-    const skokPoSiatce = [1, 60];
+    //const sliderW = [sliderH1, sliderH2];
+    const skokPoSiatce = [1, 40];
 
 
     
@@ -223,15 +225,13 @@ const SzukajMrowkiPage = () => {
 
 
     const handleDragRowB = (e, d) => {
-
-        console.log('A');
-
-        setStateRowA({
-          pos: {
-            x: stateRowA.pos.x,
-            y: stateRowA.pos.y + d.deltaY,
-          }
-        });
+        setStateRowA( (prev) => ({
+            ...prev,
+            pos: {
+                x: stateRowA.pos.x,
+                y: stateRowA.pos.y + d.deltaY,
+            }
+        }));
 
         setStateRowB( (prev) => ({  
             ...prev, 
@@ -240,14 +240,14 @@ const SzukajMrowkiPage = () => {
 
         setStateRowC({
             pos: {
-              x: stateRowC.pos.x,
-              y: stateRowC.pos.y + d.deltaY,
+                x: stateRowC.pos.x,
+                y: stateRowC.pos.y + d.deltaY,
             }
         });
         setStateRowD({
             pos: {
-              x: stateRowD.pos.x,
-              y: stateRowD.pos.y + d.deltaY,
+                x: stateRowD.pos.x,
+                y: stateRowD.pos.y + d.deltaY,
             }
         });
         setStateRowE({
@@ -259,57 +259,18 @@ const SzukajMrowkiPage = () => {
   
         // setResizeIcon( (prev) => ({ ...prev, save:    {active: false, color: 'black'}  }) )
 
-        if( stateRowB.pos.x > 50) {
-            //przesunRzadB();
-            momentWykryciaGranicy.x = stateRowB.pos.x;
-            momentWykryciaGranicy.y = stateRowB.pos.y;
+        // if( stateRowB.pos.x > 50) {
+        //     Animacja_PrzesuwajPoziomo('prawo');
+        // } else if (stateRowB.pos.x < -50) {
+        //     Animacja_PrzesuwajPoziomo('lewo');
+        // } else {
+        //     setStateRowB( (prev) => ({  
+        //         ...prev, 
+        //         scale: 1, 
+        //     }));
+        // }
 
-            console.log('wykrycie x=', momentWykryciaGranicy.x, ' y=', momentWykryciaGranicy.y, 'trwaAnimacja', trwaAnimacja);
-            //trwaAnimacja = true;
-            console.log('timerAnimacjaWPrawo', timerAnimacjaWPrawo);
-            if(timerAnimacjaWPrawo === null) {
-                timerAnimacjaWPrawo = setInterval( () => {
-                    //timerAnimacjaWPrawo = null;
-                    console.log('timer Interwal x', stateRowB.pos.x, 'y', stateRowB.pos.y);
-                    setStateRowB( (prev) => {
-                        if(prev.pos.x > 200) {
-                            clearInterval(timerAnimacjaWPrawo);
-                            timerAnimacjaWPrawo = null;
-                        }
-                        return {  
-                            ...prev, 
-                            pos: { x: prev.pos.x + 5, y: stateRowB.pos.y } 
-                        }
-                    });
-                    
-                }, 100)
-            }
-
-            setStateRowB( (prev) => ({  
-                ...prev, 
-                scale: 100, 
-            }));
-        } else {
-            setStateRowB( (prev) => ({  
-                ...prev, 
-                scale: 1, 
-            }));
-        }
-
-        if (trwaAnimacja) {
-
-        }
     };
-
-
-
-    const przesunRzadB = () => {
-        console.log('x', stateRowB.pos.x, 'y', stateRowB.pos.y);
-        setStateRowB( (prev) => ({  
-            ...prev, 
-            dragable: false,
-        }));
-    }
 
 
     const [stateRowC, setStateRowC] = useState(
@@ -455,9 +416,157 @@ const SzukajMrowkiPage = () => {
     const onDragUpdate = () => {
         /*...*/
       };
-    const onDragEnd = () => {
-        // the only one that is required
-      };
+
+
+
+
+    const wyrownajPozycje = (state, set_state = () => {})  => {
+
+        if(timerAnimacjaHoryzontalna === null) {
+            //console.log('state x', state.pos.x, ' y', state.pos.y);
+            let kierunek = 'prawo';     // 'prawo' / 'lewo'
+            let przesuniecie = 'brak';  // 'brak' / 'srodkowanie' / 'przewijanie'
+
+            if( state.pos.x < -50 ) {
+                przesuniecie = 'przewijanie';
+                kierunek = 'lewo';
+            } else if ( state.pos.x >= -50 && state.pos.x < 0 ) {
+                przesuniecie = 'srodkowanie'
+            } else if ( state.pos.x === 0 ){
+                // console.log('nic nie rób');
+            } else if ( state.pos.x > 0 && state.pos.x <= 50 ){
+                przesuniecie = 'srodkowanie'
+                kierunek = 'lewo';
+            } else {
+                przesuniecie = 'przewijanie';
+            }
+
+            if( przesuniecie === 'srodkowanie' ) {
+                timerAnimacjaHoryzontalna = setInterval( () => {
+                    const kier = kierunek;
+                    console.log('state x=', state.pos.x, 'stateB x=', stateRowB.pos.x );
+
+                    set_state( (prev) => {
+                        if( (kier === 'lewo'  && prev.pos.x <= 0) || 
+                            (kier === 'prawo' && prev.pos.x >= 0) ) {
+                            clearInterval(timerAnimacjaHoryzontalna);
+                            timerAnimacjaHoryzontalna = null;
+                            return {  
+                                ...prev, 
+                                pos: { x: 0, y: state.pos.y } 
+                            }
+                        }
+                        return {  
+                            ...prev, 
+                            pos: { x: prev.pos.x + (kier==='lewo'? -3 : 3), y: state.pos.y } 
+                        }
+                    });
+                }, 25);
+            } else if (przesuniecie === 'przewijanie') {
+                timerAnimacjaHoryzontalna = setInterval( () => {
+                    const kier = kierunek;
+                    set_state( (prev) => {
+                        if( (kier === 'lewo'  && prev.pos.x < -195) || 
+                            (kier === 'prawo' && prev.pos.x >  195) ) {
+                            clearInterval(timerAnimacjaHoryzontalna);
+                            timerAnimacjaHoryzontalna = null;
+                            return {  
+                                ...prev, 
+                                // pos: { x: 0, y: state.pos.y } 
+                                pos: { x: 0, y: 0 } 
+                            }
+                        }
+                        return {  
+                            ...prev, 
+                            pos: { x: prev.pos.x + (kier==='lewo'? -5 : 5), y: state.pos.y } 
+                        }
+                    });
+                }, 25);
+            }
+        };
+        
+        if(timerAnimacjaVertykalna  === null) {
+            let kierunekV = 'dol';     // 'dol' / 'gora'
+            let przesuniecieV = 'brak';  // 'brak' / 'srodkowanie' / 'przewijanie'
+
+            if( state.pos.y < -50 ) {
+                console.log('przewijanie V gora')
+                przesuniecieV = 'przewijanie';
+                kierunekV = 'gora';
+            } else if ( state.pos.y >= -50 && state.pos.y < 0 ) {
+                console.log('srodkowanie V w dol')
+                przesuniecieV = 'srodkowanie'
+            } else if ( state.pos.y === 0 ){
+                console.log('V nic nie rób');
+            } else if ( state.pos.y > 0 && state.pos.y <= 50 ){
+                console.log('srodkowanie V w górę')
+                przesuniecieV = 'srodkowanie'
+                kierunekV = 'gora';
+            } else {
+                console.log('przewijanie V w dół')
+                przesuniecieV = 'przewijanie';
+            }
+
+            if( przesuniecieV === 'srodkowanie' ) {
+                timerAnimacjaVertykalna = setInterval( () => {
+                    const kier = kierunekV;
+
+                    //sztuczka z odświerzeniem state
+                    setStateRowB( (prev) => {
+                        state = prev;
+                        return {...prev};
+                    })
+
+                    if( (kier === 'gora'  && state.pos.y <= 0) || 
+                        (kier === 'dol' && state.pos.y >= 0) ) {
+                        clearInterval(timerAnimacjaVertykalna);
+                        timerAnimacjaVertykalna = null;
+                        setStateRowA( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: 0 } } ));
+                        setStateRowB( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: 0 } } ));
+                        setStateRowC( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: 0 } } ));
+                        setStateRowD( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: 0 } } ));
+                        setStateRowE( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: 0 } } ));
+                    } else {
+                        setStateRowA( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: prev.pos.y + (kier==='gora'? -5 : 5) } } ));
+                        setStateRowB( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: prev.pos.y + (kier==='gora'? -5 : 5) } } ));
+                        setStateRowC( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: prev.pos.y + (kier==='gora'? -5 : 5) } } ));
+                        setStateRowD( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: prev.pos.y + (kier==='gora'? -5 : 5) } } ));
+                        setStateRowE( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: prev.pos.y + (kier==='gora'? -5 : 5) } } ));
+                    }
+                }, 25);
+            } else if (przesuniecieV === 'przewijanie') {
+                timerAnimacjaVertykalna = setInterval( () => {
+                    const kier = kierunekV;
+
+                    //sztuczka z odświerzeniem state
+                    setStateRowB( (prev) => {
+                        state = prev;
+                        return {...prev};
+                    })
+
+                    if( (kier === 'gora'  && state.pos.y < -195) || 
+                        (kier === 'dol' && state.pos.y > 195) ) {
+                        clearInterval(timerAnimacjaVertykalna);
+                        timerAnimacjaVertykalna = null;
+                        setStateRowA( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: 0 } } ));
+                        setStateRowB( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: 0 } } ));
+                        setStateRowC( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: 0 } } ));
+                        setStateRowD( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: 0 } } ));
+                        setStateRowE( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: 0 } } ));
+                    } else {
+                        setStateRowA( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: prev.pos.y + (kier==='gora'? -5 : 5) } } ));
+                        setStateRowB( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: prev.pos.y + (kier==='gora'? -5 : 5) } } ));
+                        setStateRowC( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: prev.pos.y + (kier==='gora'? -5 : 5) } } ));
+                        setStateRowD( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: prev.pos.y + (kier==='gora'? -5 : 5) } } ));
+                        setStateRowE( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: prev.pos.y + (kier==='gora'? -5 : 5) } } ));
+                    }
+                }, 25);
+            }
+
+
+
+        }
+    };
 
     // useEffect(() => {
     //     //initPoition();
@@ -582,9 +691,9 @@ const SzukajMrowkiPage = () => {
 
                     <Draggable bounds="parent" 
                         position={ {x: stateRowB.pos.x, y: stateRowB.pos.y }}
-                        onDrag={handleDragRowB}
-                        //axis="y"
                         grid={skokPoSiatce}
+                        onDrag={handleDragRowB}
+                        onStop={ () => {wyrownajPozycje(stateRowB, setStateRowB) }}
                     >
                         <div className="box">
                             Element B-1<br/>
@@ -593,14 +702,11 @@ const SzukajMrowkiPage = () => {
                     </Draggable>
 
                     <Draggable bounds="parent" 
-                        //handle={stateRowB.handle}
-                        scale={stateRowB.scale}
                         position={ {x: stateRowB.pos.x, y: stateRowB.pos.y }}
-                        // onDrag={ stateRowB.dragable ? handleDragRowB : ()=>{} }
-                        onDrag={ handleDragRowB }
-                        //axis="y"
                         grid={skokPoSiatce}
-                        
+                        scale={stateRowB.scale}
+                        onDrag={ handleDragRowB }
+                        onStop={ () => {wyrownajPozycje(stateRowB, setStateRowB) }}
                     >
                         <div className="box box__select">
                             Element B 0<br/>
@@ -612,9 +718,9 @@ const SzukajMrowkiPage = () => {
                     
                     <Draggable bounds="parent" 
                         position={ {x: stateRowB.pos.x, y: stateRowB.pos.y }}
-                        onDrag={handleDragRowB}
-                        //axis="y"
                         grid={skokPoSiatce}
+                        onDrag={handleDragRowB}
+                        onStop={ () => {wyrownajPozycje(stateRowB, setStateRowB) }}
                     >
                         <div className="box">
                             Element B 1<br/>
@@ -649,9 +755,10 @@ const SzukajMrowkiPage = () => {
 
                     <Draggable bounds="parent" 
                         position={ {x: stateRowC.pos.x, y: stateRowC.pos.y }}
-                        onDrag={handleDragRowC}
-                        //axis="y"
                         grid={skokPoSiatce}
+                        onDrag={handleDragRowC}
+                        onStop={ () => {wyrownajPozycje(stateRowC, setStateRowC) }}
+
                     >
                         <div className="box">
                             Element C-1<br/>
@@ -661,21 +768,24 @@ const SzukajMrowkiPage = () => {
 
                     <Draggable bounds="parent" 
                         position={ {x: stateRowC.pos.x, y: stateRowC.pos.y }}
-                        onDrag={handleDragRowC}
-                        //axis="y"
                         grid={skokPoSiatce}
+                        onDrag={handleDragRowC}
+                        onStop={ () => {wyrownajPozycje(stateRowC, setStateRowC) }}
                     >
                         <div className="box box__select">
                             Element C 0<br/>
+                            Pos.x={stateRowC.pos.x},<br/>
+                            Pos.y={stateRowC.pos.y},<br/>
+
                             
                         </div>
                     </Draggable>
                     
                     <Draggable bounds="parent" 
                         position={ {x: stateRowC.pos.x, y: stateRowC.pos.y }}
-                        onDrag={handleDragRowC}
-                        //axis="y"
                         grid={skokPoSiatce}
+                        onDrag={handleDragRowC}
+                        onStop={ () => {wyrownajPozycje(stateRowC, setStateRowC) }}
                     >
                         <div className="box">
                             Element C1<br/>
@@ -710,9 +820,10 @@ const SzukajMrowkiPage = () => {
 
                     <Draggable bounds="parent" 
                         position={ {x: stateRowD.pos.x, y: stateRowD.pos.y }}
-                        onDrag={handleDragRowD}
-                        //axis="y"
                         grid={skokPoSiatce}
+                        onDrag={handleDragRowD}
+                        onStop={ () => {wyrownajPozycje(stateRowD, setStateRowD) }}
+
                     >
                         <div className="box">
                             Element D-1<br/>
@@ -722,9 +833,9 @@ const SzukajMrowkiPage = () => {
 
                     <Draggable bounds="parent" 
                         position={ {x: stateRowD.pos.x, y: stateRowD.pos.y }}
-                        onDrag={handleDragRowD}
-                        //axis="y"
                         grid={skokPoSiatce}
+                        onDrag={handleDragRowD}
+                        onStop={ () => {wyrownajPozycje(stateRowD, setStateRowD) }}
                     >
                         <div className="box box__select">
                             Element D 0<br/>
@@ -734,9 +845,9 @@ const SzukajMrowkiPage = () => {
                     
                     <Draggable bounds="parent" 
                         position={ {x: stateRowD.pos.x, y: stateRowD.pos.y }}
-                        onDrag={handleDragRowD}
-                        //axis="y"
                         grid={skokPoSiatce}
+                        onDrag={handleDragRowD}
+                        onStop={ () => {wyrownajPozycje(stateRowD, setStateRowD) }}
                     >
                         <div className="box">
                             Element D 1<br/>

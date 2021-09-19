@@ -62,16 +62,16 @@ html {
   -ms-grid-row: 2;
   -ms-grid-column: 1;
   grid-area: lewo;
-  -webkit-box-shadow: 25px 0px 35px 20px #292828;
-          box-shadow: 25px 0px 35px 20px #292828;
+  -webkit-box-shadow: 25px 0px 45px 30px #292828;
+          box-shadow: 25px 0px 45px 30px #292828;
 }
 
 .ramka_na_slider__prawo {
   -ms-grid-row: 2;
   -ms-grid-column: 3;
   grid-area: prawo;
-  -webkit-box-shadow: -25px 0px 35px 20px #292828;
-          box-shadow: -25px 0px 35px 20px #292828;
+  -webkit-box-shadow: -25px 0px 45px 30px #292828;
+          box-shadow: -25px 0px 45px 30px #292828;
 }
 
 .ramka_na_slider__dol {
