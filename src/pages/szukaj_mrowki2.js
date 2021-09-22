@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef}  from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect}  from 'react';
 import {gsap} from 'gsap'
 import Draggable  from 'react-draggable';
 // import { DragDropContext } from 'react-beautiful-dnd';
@@ -6,152 +6,6 @@ import Draggable  from 'react-draggable';
 // jakiś przykład jak zrobić od podstaw https://www.positronx.io/create-react-draggable-component-with-react-draggable-package/
 
 
-const CarouselB = () => {
-    const wrapperRef = useRef(null);
-    const itemsRef = useRef([]);
-    const [carouselData, setCarouselData] = useState(null)
-    const [itemHeight, setItemHeight] = useState(0);
-    // const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
-    const [windowWidth, setWindowWidth] = useState(100);
-    
-    //console.log('window.innerWidth', window.innerWidth);
-
-    const measuredRef = React.useCallback((node) => {
-        if (node !== null) {
-          setItemHeight(node.getBoundingClientRect().height);
-        }
-    }, []);
-    
-    const addToRefs = React.useCallback((el) => {
-        if (el && !itemsRef.current.includes(el)) {
-            itemsRef.current.push(el);
-        }
-    }, []);
-    
-    const animation = (carouselItems, width) => {
-        return (
-          carouselItems.length > 0 &&
-          gsap
-            .to(carouselItems, {
-              duration: 1,
-              x: () => {
-                return `+=${width}`;
-              },
-              paused: true,
-              ease: "linear",
-              overwrite: true,
-              repeat: -1,
-              modifiers: {
-                x: (x) => {
-                  x = parseFloat(x) % width;
-                  return `${x}px`;
-                }
-              }
-            })
-            .progress(1 / carouselItems.length)
-        );
-    };
-
-    const carouselAnimation = () => {
-        const carouselItems = itemsRef.current;
-        let carouselWidth, carouselLength, snapBox;
-    
-        if (carouselItems.length > 0) {
-          carouselLength = itemsRef.current.length;
-          carouselWidth = itemsRef.current[0].clientWidth * carouselLength;
-          snapBox = gsap.utils.snap(itemsRef.current[0].clientWidth);
-    
-          carouselItems.forEach((elm, i) => {
-            gsap.set(elm, {
-              x: i * itemsRef.current[0].clientWidth,
-              left: -itemsRef.current[0].clientWidth
-            });
-          });
-    
-          gsap.set("#wrapper", { height: itemHeight });
-        }
-
-        const wrapProgress = gsap.utils.wrap(0, 1);
-        const proxy = document.createElement("div");
-        const timeLine = animation(carouselItems, carouselWidth);
-    
-
-        // const onStart = 50;
-        // const onStop = 250;
-        // const dragHandlers = {onStart: onStart, onStop: onStop};
-
-        // Draggable.create(proxy, {
-        //     trigger: "#elm",
-        //     throwProps: true,
-        //     inertia: true,
-        //     isThrowing: true,
-        //     dragResistance: 0.55,
-        //     onDrag: updateProgress,
-        //     onThrowUpdate: updateProgress,
-        //     dragClickables: true,
-        //     snap: {
-        //         x: snapBox
-        //     }
-        // });
-
-        // <Draggable {...dragHandlers}>
-        //     <div className="box">I can be dragged anywhere</div>
-        // </Draggable>
-    
-        //Draggable.createElement(proxy, {});
-
-        function updateProgress() {
-          if (timeLine)
-            timeLine.progress(
-              wrapProgress(gsap.getProperty(proxy, "x") / carouselWidth)
-            );
-        }
-    };
-
-
-    useEffect(() => {
-        // gsap.registerPlugin(Draggable, InertiaPlugin);
-        gsap.registerPlugin(Draggable);
-        setCarouselData([1, 2, 3, 4, 5, 6, 7, 8])    
-    }, [])
-
-    React.useEffect(() => {
-    const handleWindowResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener("resize", () => {
-        handleWindowResize();
-        carouselAnimation();
-    });
-
-    carouselAnimation();
-    }, [carouselData, windowWidth]);
-     
-
-
-
-
-
-
-
-    return (
-        <div className="carousel-container" id="wrapper" ref={wrapperRef}>
-          <div className="carousel-display" ref={measuredRef}>
-            {carouselData && carouselData.map((item) => {
-                return (
-                  <div
-                    key={item}
-                    id="elm"
-                    className="carousel-display__item"
-                    ref={addToRefs}
-                  >
-                    {item}
-                  </div>
-                );
-              })}
-          </div>
-        </div>
-      );
-
-}
 
 //let momentWykryciaGranicy = {x:0, y:0};
 //let trwaAnimacja = false;
@@ -172,10 +26,10 @@ const servis_pokzujWspolzedne = false;
 const SzukajMrowkiPage = () => {
     const skokPoSiatce = [5, 40]; //płynność lub skokowość przesówania płytek
 
-    const widoczneElementy = [ 
+    let widoczneElementyInit = [ 
         [ {opis: "A-2" }, {opis: "A-1" }, {opis: "A 0" }, {opis: "A 1" }, {opis: "A 2" } ] ,
         [ {opis: "B-2" }, {opis: "B-1" }, {opis: "B 0" }, {opis: "B 1" }, {opis: "B 2" } ] ,
-        [ {opis: "C-2" }, {opis: "C-1" }, {opis: "C 0" }, {opis: "C 1" }, {opis: "C 2" } ] ,
+        [ {opis: "C-2" }, {opis: "C-1" }, {opis: "C 0" }, {opis: "C 8" }, {opis: "C 2" } ] ,
         [ {opis: "D-2" }, {opis: "D-1" }, {opis: "D 0" }, {opis: "D 1" }, {opis: "D 2" } ] ,
         [ {opis: "E-2" }, {opis: "E-1" }, {opis: "E 0" }, {opis: "E 1" }, {opis: "E 2" } ] ,
     ];
@@ -186,7 +40,7 @@ const SzukajMrowkiPage = () => {
     //     [ {opis: "D-2" }, {opis: "D-1" }, {opis: "D 0" }, {opis: "D 1" }, {opis: "D 2" } ] ,
     //     [ {opis: "E-2" }, {opis: "E-1" }, {opis: "E 0" }, {opis: "E 1" }, {opis: "E 2" } ] ,
     // ]);
-    //const [widoczneElementy2, setWidoczneElementy] = useState(widoczneElementy);
+    const [widoczneElementy, setWidoczneElementy] = useState(widoczneElementyInit);
     //const [widoczneElementy2, setWidoczneElementy] = useState([[{'e': 43}, 'd'], [{'e': 43}, 'd']]);
 
     const elementyDoWyboru = [
@@ -205,43 +59,45 @@ const SzukajMrowkiPage = () => {
 
     const przerysujAktualnePozycje = () => {
         let wiersz = przesunieteMenuY;
-        const copyWidoczneElementy = {...widoczneElementy};
+        const kopiaTab = widoczneElementy.slice();
 
         if (iloscWierszy) {
-            for (let i = 1; i < copyWidoczneElementy.length; i++) {
+            for (let i = 1; i < kopiaTab.length; i++) {
                 const iloscEl = elementyDoWyboru[wiersz].lista.length;
                 const elementy = elementyDoWyboru[wiersz].lista;
                 let aktualnieWybrany = elementyDoWyboru[wiersz].wybrany;
                 let wyb = aktualnieWybrany % iloscEl;
 
-                copyWidoczneElementy[i][2] = elementy[wyb];
+                kopiaTab[i][2] = elementy[wyb];
                 wyb = ++wyb % iloscEl;
-                copyWidoczneElementy[i][3] = elementy[wyb];
+                kopiaTab[i][3] = elementy[wyb];
                 wyb = ++wyb % iloscEl;
-                copyWidoczneElementy[i][4] = elementy[wyb];
+                kopiaTab[i][4] = elementy[wyb];
 
                 wyb = aktualnieWybrany;
                 if (--wyb < 0) { wyb = iloscEl-1; };
-                copyWidoczneElementy[i][1] = elementy[wyb];
+                kopiaTab[i][1] = elementy[wyb];
                 if (--wyb < 0) { wyb = iloscEl-1; };
-                copyWidoczneElementy[i][0] = elementy[wyb];
+                kopiaTab[i][0] = elementy[wyb];
                 wiersz = ++wiersz % iloscWierszy;
 
-                if ( i === 0 ) break;
-                if (i === copyWidoczneElementy.length -1) { i = -1; };
-                console.log('wiersz', wiersz);
+                if (i === 0) break;
+                if (i === kopiaTab.length -1) { i = -1; };
             }
         }
-        //setWidoczneElementy(copyWidoczneElementy);
-        console.log('Przerysowana lista wyboru', copyWidoczneElementy);
-        console.log('a', elementyDoWyboru);
-
+        setWidoczneElementy( () => kopiaTab);
+        console.log('Przerysowana lista wyboru', widoczneElementy);
     }
 
-    // useEffect(() => {
-    //     przerysujAktualnePozycje();
-    // }, [widoczneElementy]);
-    przerysujAktualnePozycje();
+    useLayoutEffect( () => {
+        przerysujAktualnePozycje();
+    }, [] );
+
+    useEffect(() => {
+        przerysujAktualnePozycje();
+        return () => {};
+    }, []);
+    //przerysujAktualnePozycje();
     
 
 
@@ -605,7 +461,7 @@ const SzukajMrowkiPage = () => {
                         }
                     });
 
-                    console.log('newPos.x', newPos.x, ' newPos.y', newPos.y, 'przesonH',  deltaH);
+                    //console.log('newPos.x', newPos.x, ' newPos.y', newPos.y, 'przesonH',  deltaH);
 
                     setStateRowB( (prev) => ( { ...prev, pos: { x: newPos.x, y: newPos.y } } ));
                     // setStateRowB( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: prev.pos.y + (kier==='gora'? -5 : 5) } } ));
@@ -730,6 +586,8 @@ const SzukajMrowkiPage = () => {
     //     };
     // }, []);
 
+
+
     return ( 
         <>
             <div >
@@ -755,7 +613,7 @@ const SzukajMrowkiPage = () => {
                         onDrag={handleDragRowA}
                         grid={skokPoSiatce}
                     >
-                        {console.log('ll', widoczneElementy)}
+                        
                         <div className="box">
                             {widoczneElementy[0][0].opis}
                         </div>
