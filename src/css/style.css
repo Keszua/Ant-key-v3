@@ -99,6 +99,8 @@ html {
   height: 190px;
   padding: 5px;
   float: left;
+  font-size: 3rem;
+  text-align: center;
   position: relative;
 }
 

@@ -153,19 +153,117 @@ const CarouselB = () => {
 
 }
 
-let momentWykryciaGranicy = {x:0, y:0};
+//let momentWykryciaGranicy = {x:0, y:0};
 //let trwaAnimacja = false;
 let timerAnimacjaHoryzontalna = null;
 let timerAnimacjaVertykalna = null;
 
 
+const przesunTablice = (tablica, iloscPoz) => {
+    for (let j = 0; j < iloscPoz; j++) {
+        const bufor = tablica[4];
+        for (let i = 4; i > 0; i--) { tablica[i] = tablica[i-1]; }
+        tablica[0] = bufor;
+    }
+}
+
+const servis_pokzujWspolzedne = false;
 
 const SzukajMrowkiPage = () => {
+    const skokPoSiatce = [5, 40]; //płynność lub skokowość przesówania płytek
 
-    const sliderH1 = ['1A', '1B', '1C', '1D', '1E'];
-    const sliderH2 = ['1A', '1B', '1C', '1D', '1E'];
+    const widoczneElementy = [ 
+        [ {opis: "A-2" }, {opis: "A-1" }, {opis: "A 0" }, {opis: "A 1" }, {opis: "A 2" } ] ,
+        [ {opis: "B-2" }, {opis: "B-1" }, {opis: "B 0" }, {opis: "B 1" }, {opis: "B 2" } ] ,
+        [ {opis: "C-2" }, {opis: "C-1" }, {opis: "C 0" }, {opis: "C 1" }, {opis: "C 2" } ] ,
+        [ {opis: "D-2" }, {opis: "D-1" }, {opis: "D 0" }, {opis: "D 1" }, {opis: "D 2" } ] ,
+        [ {opis: "E-2" }, {opis: "E-1" }, {opis: "E 0" }, {opis: "E 1" }, {opis: "E 2" } ] ,
+    ];
+    // const [widoczneElementy, setWidoczneElementy] = useState([
+    //     [ {opis: "A-2" }, {opis: "A-1" }, {opis: "A 0" }, {opis: "A 1" }, {opis: "A 2" } ] ,
+    //     [ {opis: "B-2" }, {opis: "B-1" }, {opis: "B 0" }, {opis: "B 1" }, {opis: "B 2" } ] ,
+    //     [ {opis: "C-2" }, {opis: "C-1" }, {opis: "C 0" }, {opis: "C 1" }, {opis: "C 2" } ] ,
+    //     [ {opis: "D-2" }, {opis: "D-1" }, {opis: "D 0" }, {opis: "D 1" }, {opis: "D 2" } ] ,
+    //     [ {opis: "E-2" }, {opis: "E-1" }, {opis: "E 0" }, {opis: "E 1" }, {opis: "E 2" } ] ,
+    // ]);
+    //const [widoczneElementy2, setWidoczneElementy] = useState(widoczneElementy);
+    //const [widoczneElementy2, setWidoczneElementy] = useState([[{'e': 43}, 'd'], [{'e': 43}, 'd']]);
+
+    const elementyDoWyboru = [
+        { wybrany: 0,
+            lista: [ {opis: "?" }, {opis: "W1" }, {opis: "W2" } ] },
+        { wybrany: 0,
+            lista: [ {opis: "?" }, {opis: "X1" }, {opis: "X2" }, {opis: "X3" }, {opis: "X4" } ] },
+        { wybrany: 0,
+            lista: [ {opis: "?" }, {opis: "B1" }, {opis: "B2" }, {opis: "B3" } ] },
+                
+    ];
+
+
+    const iloscWierszy = elementyDoWyboru.length;
+    let przesunieteMenuY = 0; // przesunięcie w menu po osi Y
+
+    const przerysujAktualnePozycje = () => {
+        let wiersz = przesunieteMenuY;
+        const copyWidoczneElementy = {...widoczneElementy};
+
+        if (iloscWierszy) {
+            for (let i = 1; i < copyWidoczneElementy.length; i++) {
+                const iloscEl = elementyDoWyboru[wiersz].lista.length;
+                const elementy = elementyDoWyboru[wiersz].lista;
+                let aktualnieWybrany = elementyDoWyboru[wiersz].wybrany;
+                let wyb = aktualnieWybrany % iloscEl;
+
+                copyWidoczneElementy[i][2] = elementy[wyb];
+                wyb = ++wyb % iloscEl;
+                copyWidoczneElementy[i][3] = elementy[wyb];
+                wyb = ++wyb % iloscEl;
+                copyWidoczneElementy[i][4] = elementy[wyb];
+
+                wyb = aktualnieWybrany;
+                if (--wyb < 0) { wyb = iloscEl-1; };
+                copyWidoczneElementy[i][1] = elementy[wyb];
+                if (--wyb < 0) { wyb = iloscEl-1; };
+                copyWidoczneElementy[i][0] = elementy[wyb];
+                wiersz = ++wiersz % iloscWierszy;
+
+                if ( i === 0 ) break;
+                if (i === copyWidoczneElementy.length -1) { i = -1; };
+                console.log('wiersz', wiersz);
+            }
+        }
+        //setWidoczneElementy(copyWidoczneElementy);
+        console.log('Przerysowana lista wyboru', copyWidoczneElementy);
+        console.log('a', elementyDoWyboru);
+
+    }
+
+    // useEffect(() => {
+    //     przerysujAktualnePozycje();
+    // }, [widoczneElementy]);
+    przerysujAktualnePozycje();
+    
+
+
+    const zmienWybranyElement = ( nrWiersza, kierunek ) => {
+        const wi = (nrWiersza + przesunieteMenuY) % iloscWierszy;
+        elementyDoWyboru[wi-1].wybrany += kierunek;
+        przerysujAktualnePozycje();
+    }
+
+    // 14x14 = 196
+    // 196x2 = 392
+    // 196x3 = 588
+    // 14*3 = 42
+
+    // 12x12=144
+    // 144x3=432
+
+
+
+
     //const sliderW = [sliderH1, sliderH2];
-    const skokPoSiatce = [1, 40];
+
 
 
     
@@ -218,6 +316,7 @@ const SzukajMrowkiPage = () => {
     };
 
     const [stateRowB, setStateRowB] = useState({
+        id: 1,
         pos: { x: 0, y: 0 },
         dragable: true,
         scale: 1,
@@ -273,9 +372,10 @@ const SzukajMrowkiPage = () => {
     };
 
 
-    const [stateRowC, setStateRowC] = useState(
-        {  pos: { x: 0, y: 0 } }
-    )
+    const [stateRowC, setStateRowC] = useState({
+        id: 2,
+        pos: { x: 0, y: 0 }
+    })
 
     const handleDragRowC = (e, d) => {
         setStateRowA({
@@ -311,9 +411,10 @@ const SzukajMrowkiPage = () => {
   
     };
 
-    const [stateRowD, setStateRowD] = useState(
-        {  pos: { x: 0, y: 0 } }
-    )
+    const [stateRowD, setStateRowD] = useState({
+        id: 3,
+        pos: { x: 0, y: 0 } 
+    })
 
     const handleDragRowD = (e, d) => {
         setStateRowA({
@@ -424,52 +525,105 @@ const SzukajMrowkiPage = () => {
 
         if(timerAnimacjaHoryzontalna === null) {
             //console.log('state x', state.pos.x, ' y', state.pos.y);
-            let kierunek = 'prawo';     // 'prawo' / 'lewo'
-            let przesuniecie = 'brak';  // 'brak' / 'srodkowanie' / 'przewijanie'
+            let kierunekH = 'prawo';     // 'prawo' / 'lewo'
+            let przesuniecieH = 'brak';  // 'brak' / 'srodkowanie' / 'przewijanie'
+            let kierunekV = 'dol';     // 'dol' / 'gora'
+            let przesuniecieV = 'brak';  // 'brak' / 'srodkowanie' / 'przewijanie'
+
 
             if( state.pos.x < -50 ) {
-                przesuniecie = 'przewijanie';
-                kierunek = 'lewo';
+                przesuniecieH = 'przewijanie';
+                kierunekH = 'lewo';
             } else if ( state.pos.x >= -50 && state.pos.x < 0 ) {
-                przesuniecie = 'srodkowanie'
+                przesuniecieH = 'srodkowanie'
             } else if ( state.pos.x === 0 ){
                 // console.log('nic nie rób');
             } else if ( state.pos.x > 0 && state.pos.x <= 50 ){
-                przesuniecie = 'srodkowanie'
-                kierunek = 'lewo';
+                przesuniecieH = 'srodkowanie'
+                kierunekH = 'lewo';
             } else {
-                przesuniecie = 'przewijanie';
+                przesuniecieH = 'przewijanie';
             }
 
-            if( przesuniecie === 'srodkowanie' ) {
+            if( state.pos.y < -50 ) {
+                przesuniecieV = 'przewijanie';
+                kierunekV = 'gora';
+            } else if ( state.pos.y >= -50 && state.pos.y < 0 ) {
+                przesuniecieV = 'srodkowanie'
+            } else if ( state.pos.y === 0 ){
+                //console.log('V nic nie rób');
+            } else if ( state.pos.y > 0 && state.pos.y <= 50 ){
+                przesuniecieV = 'srodkowanie'
+                kierunekV = 'gora';
+            } else {
+                przesuniecieV = 'przewijanie';
+            }
+
+            if( przesuniecieH === 'srodkowanie' || przesuniecieV === 'srodkowanie' ) {
                 timerAnimacjaHoryzontalna = setInterval( () => {
-                    const kier = kierunek;
-                    console.log('state x=', state.pos.x, 'stateB x=', stateRowB.pos.x );
+                    const kierH = kierunekH;
+                    const kierV = kierunekV;
+                    //console.log('state x=', state.pos.x, 'stateB x=', stateRowB.pos.x );
+                    let newPos = {x: 0, y: 0};
+                    let deltaH = 0;
+                    let deltaV = 0;
 
                     set_state( (prev) => {
-                        if( (kier === 'lewo'  && prev.pos.x <= 0) || 
-                            (kier === 'prawo' && prev.pos.x >= 0) ) {
+                        //newPos = prev.pos;
+                        if( ((kierH === 'lewo'  && prev.pos.x <= 0) || 
+                             (kierH === 'prawo' && prev.pos.x >= 0)) &&
+                            ((kierV === 'gora'  && prev.pos.y <= 0) || 
+                             (kierV === 'dol'   && prev.pos.y >= 0)) 
+                            ) {
                             clearInterval(timerAnimacjaHoryzontalna);
                             timerAnimacjaHoryzontalna = null;
                             return {  
                                 ...prev, 
-                                pos: { x: 0, y: state.pos.y } 
+                                pos: { x: 0, y: 0 } 
                             }
                         }
+                        if ( Math.abs(prev.pos.x) > 5 ) {
+                            deltaH = Math.round(prev.pos.x / 5);
+                        } else if ( Math.abs(prev.pos.x) > 0 ) {
+                            deltaH = prev.pos.x;
+                        }
+
+                        if ( Math.abs(prev.pos.y) > 5 ) {
+                            deltaV = Math.round(prev.pos.y / 5);
+                        } else if ( Math.abs(prev.pos.y) > 0 ) {
+                            deltaV = prev.pos.y;
+                        }
+
+                        newPos.x = prev.pos.x - deltaH;
+                        newPos.y = prev.pos.y - deltaV;
+
                         return {  
                             ...prev, 
-                            pos: { x: prev.pos.x + (kier==='lewo'? -3 : 3), y: state.pos.y } 
+                            // pos: { x: prev.pos.x + (kierH==='lewo'? -3 : 3), y: prev.pos.y  + (kierV==='gora'? -3 : 3)  } 
+                            // pos: { x: prev.pos.x - deltaH, y: prev.pos.y -deltaV } 
+                            pos: { x: newPos.x, y: newPos.y } 
                         }
                     });
+
+                    console.log('newPos.x', newPos.x, ' newPos.y', newPos.y, 'przesonH',  deltaH);
+
+                    setStateRowB( (prev) => ( { ...prev, pos: { x: newPos.x, y: newPos.y } } ));
+                    // setStateRowB( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: prev.pos.y + (kier==='gora'? -5 : 5) } } ));
+                    // setStateRowC( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: prev.pos.y + (kier==='gora'? -5 : 5) } } ));
+                    // setStateRowD( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: prev.pos.y + (kier==='gora'? -5 : 5) } } ));
+                    // setStateRowE( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: prev.pos.y + (kier==='gora'? -5 : 5) } } ));
+
+
                 }, 25);
-            } else if (przesuniecie === 'przewijanie') {
+            } else if (przesuniecieH === 'przewijanie') {
                 timerAnimacjaHoryzontalna = setInterval( () => {
-                    const kier = kierunek;
+                    const kier = kierunekH;
                     set_state( (prev) => {
                         if( (kier === 'lewo'  && prev.pos.x < -195) || 
                             (kier === 'prawo' && prev.pos.x >  195) ) {
                             clearInterval(timerAnimacjaHoryzontalna);
                             timerAnimacjaHoryzontalna = null;
+                            //zmienWybranyElement(prev.id, kier==='lewo'? -1 : 1);
                             return {  
                                 ...prev, 
                                 // pos: { x: 0, y: state.pos.y } 
@@ -485,7 +639,8 @@ const SzukajMrowkiPage = () => {
             }
         };
         
-        if(timerAnimacjaVertykalna  === null) {
+        // if(timerAnimacjaVertykalna  === null) {
+        if(timerAnimacjaVertykalna  === "siemka") {
             let kierunekV = 'dol';     // 'dol' / 'gora'
             let przesuniecieV = 'brak';  // 'brak' / 'srodkowanie' / 'przewijanie'
 
@@ -588,67 +743,31 @@ const SzukajMrowkiPage = () => {
                 </svg>
             </div>
 
-            {/* <Draggable
-                // axis="x"
-                handle=".handle"
-                defaultPosition={{x: 220, y: 0}}
-                position={null}
-                grid={[5, 25]}
-                scale={1}
-                //onStart={handleStart}
-                onDrag={handleDrag}
-                // onStop={handleStop}
-                  //onMouseDown = {(e: MouseEvent) => void}
-                //onMouseDown = {(e) => {}}
-                //onMouseUp
-                //onTouchEnd
-
-            >
-                <div>
-                    <div className="box handle">Drag from here</div>
-                    <div>This readme is really dragging on...</div>
-                    <div>
-                        <strong>x: {stateA1.deltaXyPos.x.toFixed(0)}, </strong>
-                        <strong>y: {stateA1.deltaXyPos.y.toFixed(0)}</strong>
-                    </div>
-                </div>
-            </Draggable> */}
-
-
             <div className="okno_wyboru">
             
                 <div className='ramka_na_slider ramka_na_slider__gora' > </div>
             
                 <div className='ramka_na_slider ramka_na_slider__srodek' >
 
-                    {/* ------------------------- Pierwszy rząd ------------------------- */}
+                    {/* ------------------------- ukryty górny ------------------------- */}
+                    <Draggable bounds="parent"
+                        position={ {x: stateRowA.pos.x, y: stateRowA.pos.y }}
+                        onDrag={handleDragRowA}
+                        grid={skokPoSiatce}
+                    >
+                        {console.log('ll', widoczneElementy)}
+                        <div className="box">
+                            {widoczneElementy[0][0].opis}
+                        </div>
+                    </Draggable>
+
                     <Draggable bounds="parent"
                         position={ {x: stateRowA.pos.x, y: stateRowA.pos.y }}
                         onDrag={handleDragRowA}
                         grid={skokPoSiatce}
                     >
                         <div className="box">
-                            Element A-2<br/>
-                        </div>
-                    </Draggable>
-
-                    <Draggable bounds="parent"
-                        position={ {x: stateRowA.pos.x, y: stateRowA.pos.y }}
-                        onDrag={handleDragRowA}
-                        grid={skokPoSiatce}
-                    >
-                        <div className="box">
-                            Element A-1<br/>
-                        </div>
-                    </Draggable>
-
-                    <Draggable bounds="parent"
-                        position={ {x: stateRowA.pos.x, y: stateRowA.pos.y } }
-                        onDrag={handleDragRowA}
-                        grid={skokPoSiatce}
-                    >
-                        <div className="box">
-                            Element A 0<br/>
+                            {widoczneElementy[0][1].opis}
 
                         </div>
                     </Draggable>
@@ -659,8 +778,7 @@ const SzukajMrowkiPage = () => {
                         grid={skokPoSiatce}
                     >
                         <div className="box">
-                            Element A 1<br/>
-
+                            {widoczneElementy[0][2].opis}
                         </div>
                     </Draggable>
 
@@ -670,13 +788,22 @@ const SzukajMrowkiPage = () => {
                         grid={skokPoSiatce}
                     >
                         <div className="box">
-                            Element A 2<br/>
+                            {widoczneElementy[0][3].opis}
+                        </div>
+                    </Draggable>
 
+                    <Draggable bounds="parent"
+                        position={ {x: stateRowA.pos.x, y: stateRowA.pos.y } }
+                        onDrag={handleDragRowA}
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            {widoczneElementy[0][4].opis}
                         </div>
                     </Draggable>
 
 
-                    {/* -------------------------   Drugi rząd  ------------------------- */}
+                    {/* -------------------------   Perwszy widoczny rząd  ------------------------- */}
                     <Draggable bounds="parent" 
                         position={ {x: stateRowB.pos.x, y: stateRowB.pos.y }}
                         onDrag={handleDragRowB}
@@ -684,8 +811,7 @@ const SzukajMrowkiPage = () => {
                         grid={skokPoSiatce}
                     >
                         <div className="box">
-                            Element B-2<br/>
-                            
+                            {widoczneElementy[1][0].opis}
                         </div>
                     </Draggable>
 
@@ -696,8 +822,7 @@ const SzukajMrowkiPage = () => {
                         onStop={ () => {wyrownajPozycje(stateRowB, setStateRowB) }}
                     >
                         <div className="box">
-                            Element B-1<br/>
-                            
+                            {widoczneElementy[1][1].opis}
                         </div>
                     </Draggable>
 
@@ -709,10 +834,12 @@ const SzukajMrowkiPage = () => {
                         onStop={ () => {wyrownajPozycje(stateRowB, setStateRowB) }}
                     >
                         <div className="box box__select">
-                            Element B 0<br/>
-                            Pos.x={stateRowB.pos.x},<br/>
-                            Pos.y={stateRowB.pos.y},<br/>
-
+                            {widoczneElementy[1][2].opis} <br/>
+                            { servis_pokzujWspolzedne ? 
+                                `Pos.x= ${stateRowB.pos.x} 
+                                 Pos.y= ${stateRowB.pos.y}`  
+                                : null
+                            }
                         </div>
                     </Draggable>
                     
@@ -723,8 +850,8 @@ const SzukajMrowkiPage = () => {
                         onStop={ () => {wyrownajPozycje(stateRowB, setStateRowB) }}
                     >
                         <div className="box">
-                            Element B 1<br/>
-                            
+                            {widoczneElementy[1][3].opis}
+
                         </div>
                     </Draggable>
 
@@ -735,12 +862,12 @@ const SzukajMrowkiPage = () => {
                         grid={skokPoSiatce}
                     >
                         <div className="box">
-                            Element B 2<br/>
-                            
+                            {widoczneElementy[1][4].opis}
+
                         </div>
                     </Draggable>
 
-                    {/* -------------------------  Trzeci rząd  ------------------------- */}
+                    {/* -------------------------  drugi widoczny rząd  ------------------------- */}
                     <Draggable bounds="parent" 
                         position={ {x: stateRowC.pos.x, y: stateRowC.pos.y }}
                         onDrag={handleDragRowC}
@@ -748,8 +875,7 @@ const SzukajMrowkiPage = () => {
                         grid={skokPoSiatce}
                     >
                         <div className="box">
-                            Element C-2<br/>
-                            
+                            {widoczneElementy[2][0].opis}
                         </div>
                     </Draggable>
 
@@ -761,7 +887,7 @@ const SzukajMrowkiPage = () => {
 
                     >
                         <div className="box">
-                            Element C-1<br/>
+                            {widoczneElementy[2][1].opis}
                             
                         </div>
                     </Draggable>
@@ -773,11 +899,12 @@ const SzukajMrowkiPage = () => {
                         onStop={ () => {wyrownajPozycje(stateRowC, setStateRowC) }}
                     >
                         <div className="box box__select">
-                            Element C 0<br/>
-                            Pos.x={stateRowC.pos.x},<br/>
-                            Pos.y={stateRowC.pos.y},<br/>
-
-                            
+                            {widoczneElementy[2][2].opis} <br/>
+                            { servis_pokzujWspolzedne ? 
+                                `Pos.x= ${stateRowC.pos.x} 
+                                 Pos.y= ${stateRowC.pos.y}`  
+                                : null
+                            }
                         </div>
                     </Draggable>
                     
@@ -788,7 +915,7 @@ const SzukajMrowkiPage = () => {
                         onStop={ () => {wyrownajPozycje(stateRowC, setStateRowC) }}
                     >
                         <div className="box">
-                            Element C1<br/>
+                            {widoczneElementy[2][3].opis}
                             
                         </div>
                     </Draggable>
@@ -800,12 +927,12 @@ const SzukajMrowkiPage = () => {
                         grid={skokPoSiatce}
                     >
                         <div className="box">
-                            Element C2<br/>
-                            
+                            {widoczneElementy[2][3].opis}
+
                         </div>
                     </Draggable>
 
-                    {/* -------------------------  Czwarty rząd  ------------------------- */}
+                    {/* -------------------------  trzeci widoczny rząd  ------------------------- */}
                     <Draggable bounds="parent" 
                         position={ {x: stateRowD.pos.x, y: stateRowD.pos.y }}
                         onDrag={handleDragRowD}
@@ -813,8 +940,8 @@ const SzukajMrowkiPage = () => {
                         grid={skokPoSiatce}
                     >
                         <div className="box">
-                            Element D-2<br/>
-                            
+                            {widoczneElementy[3][0].opis}
+
                         </div>
                     </Draggable>
 
@@ -826,8 +953,8 @@ const SzukajMrowkiPage = () => {
 
                     >
                         <div className="box">
-                            Element D-1<br/>
-                            
+                            {widoczneElementy[3][1].opis}
+
                         </div>
                     </Draggable>
 
@@ -838,8 +965,7 @@ const SzukajMrowkiPage = () => {
                         onStop={ () => {wyrownajPozycje(stateRowD, setStateRowD) }}
                     >
                         <div className="box box__select">
-                            Element D 0<br/>
-                            
+                            {widoczneElementy[3][2].opis}
                         </div>
                     </Draggable>
                     
@@ -850,8 +976,7 @@ const SzukajMrowkiPage = () => {
                         onStop={ () => {wyrownajPozycje(stateRowD, setStateRowD) }}
                     >
                         <div className="box">
-                            Element D 1<br/>
-                            
+                            {widoczneElementy[3][3].opis}
                         </div>
                     </Draggable>
 
@@ -862,12 +987,11 @@ const SzukajMrowkiPage = () => {
                         grid={skokPoSiatce}
                     >
                         <div className="box">
-                            Element D 2<br/>
-                            
+                            {widoczneElementy[3][4].opis}
                         </div>
                     </Draggable>
 
-                    {/* -------------------------   Piąty rząd  ------------------------- */}
+                    {/* -------------------------   Piąty rząd (ukryty)  ------------------------- */}
                     <Draggable bounds="parent" 
                         position={ {x: stateRowE.pos.x, y: stateRowE.pos.y }}
                         onDrag={handleDragRowE}
@@ -875,20 +999,7 @@ const SzukajMrowkiPage = () => {
                         grid={skokPoSiatce}
                     >
                         <div className="box">
-                            Element E-2<br/>
-                            
-                        </div>
-                    </Draggable>
-
-                    <Draggable bounds="parent" 
-                        position={ {x: stateRowE.pos.x, y: stateRowE.pos.y }}
-                        onDrag={handleDragRowE}
-                        //axis="y"
-                        grid={skokPoSiatce}
-                    >
-                        <div className="box">
-                            Element E-1<br/>
-                            
+                            {widoczneElementy[4][0].opis}
                         </div>
                     </Draggable>
 
@@ -899,8 +1010,18 @@ const SzukajMrowkiPage = () => {
                         grid={skokPoSiatce}
                     >
                         <div className="box">
-                            Element E 0<br/>
-                            
+                            {widoczneElementy[4][1].opis}
+                        </div>
+                    </Draggable>
+
+                    <Draggable bounds="parent" 
+                        position={ {x: stateRowE.pos.x, y: stateRowE.pos.y }}
+                        onDrag={handleDragRowE}
+                        //axis="y"
+                        grid={skokPoSiatce}
+                    >
+                        <div className="box">
+                            {widoczneElementy[4][2].opis}
                         </div>
                     </Draggable>
                     
@@ -911,8 +1032,7 @@ const SzukajMrowkiPage = () => {
                         grid={skokPoSiatce}
                     >
                         <div className="box">
-                            Element E1<br/>
-                            
+                            {widoczneElementy[4][3].opis}
                         </div>
                     </Draggable>
 
@@ -923,29 +1043,16 @@ const SzukajMrowkiPage = () => {
                         grid={skokPoSiatce}
                     >
                         <div className="box">
-                            Element E2<br/>
-                            
+                            {widoczneElementy[4][4].opis}
                         </div>
                     </Draggable>
-
-
                 </div>
 
                 <div className='ramka_na_slider ramka_na_slider__lewo' > </div>
                 <div className='ramka_na_slider ramka_na_slider__prawo' > </div>
                 <div className='ramka_na_slider ramka_na_slider__dol' > </div>
 
-            
-
-            
-            
             </div>
-
-
- 
-
-
-
         </>
     )
 
