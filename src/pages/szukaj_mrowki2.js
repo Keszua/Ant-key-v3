@@ -6,11 +6,9 @@ import Draggable  from 'react-draggable';
 // jakiś przykład jak zrobić od podstaw https://www.positronx.io/create-react-draggable-component-with-react-draggable-package/
 
 
-
-//let momentWykryciaGranicy = {x:0, y:0};
-//let trwaAnimacja = false;
 let timerAnimacjaHoryzontalna = null;
 let timerAnimacjaVertykalna = null;
+let timerNieprzesowaj2razy = null;
 
 
 const przesunTablice = (tablica, iloscPoz) => {
@@ -23,6 +21,8 @@ const przesunTablice = (tablica, iloscPoz) => {
 
 const servis_pokzujWspolzedne = false;
 
+
+
 const SzukajMrowkiPage = () => {
     const skokPoSiatce = [5, 40]; //płynność lub skokowość przesówania płytek
 
@@ -33,26 +33,16 @@ const SzukajMrowkiPage = () => {
         [ {opis: "D-2" }, {opis: "D-1" }, {opis: "D 0" }, {opis: "D 1" }, {opis: "D 2" } ] ,
         [ {opis: "E-2" }, {opis: "E-1" }, {opis: "E 0" }, {opis: "E 1" }, {opis: "E 2" } ] ,
     ];
-    // const [widoczneElementy, setWidoczneElementy] = useState([
-    //     [ {opis: "A-2" }, {opis: "A-1" }, {opis: "A 0" }, {opis: "A 1" }, {opis: "A 2" } ] ,
-    //     [ {opis: "B-2" }, {opis: "B-1" }, {opis: "B 0" }, {opis: "B 1" }, {opis: "B 2" } ] ,
-    //     [ {opis: "C-2" }, {opis: "C-1" }, {opis: "C 0" }, {opis: "C 1" }, {opis: "C 2" } ] ,
-    //     [ {opis: "D-2" }, {opis: "D-1" }, {opis: "D 0" }, {opis: "D 1" }, {opis: "D 2" } ] ,
-    //     [ {opis: "E-2" }, {opis: "E-1" }, {opis: "E 0" }, {opis: "E 1" }, {opis: "E 2" } ] ,
-    // ]);
     const [widoczneElementy, setWidoczneElementy] = useState(widoczneElementyInit);
-    //const [widoczneElementy2, setWidoczneElementy] = useState([[{'e': 43}, 'd'], [{'e': 43}, 'd']]);
 
-    const elementyDoWyboru = [
-        { wybrany: 0,
-            lista: [ {opis: "?" }, {opis: "W1" }, {opis: "W2" } ] },
-        { wybrany: 0,
-            lista: [ {opis: "?" }, {opis: "X1" }, {opis: "X2" }, {opis: "X3" }, {opis: "X4" } ] },
-        { wybrany: 0,
-            lista: [ {opis: "?" }, {opis: "B1" }, {opis: "B2" }, {opis: "B3" } ] },
-                
-    ];
-
+    const [elementyDoWyboru, setElementyDoWyboru] = useState([
+                { wybrany: 0,
+                    lista: [ {opis: "?" }, {opis: "X1" }, {opis: "X2" }, {opis: "X3" } ] },
+                { wybrany: 0,
+                    lista: [ {opis: "?" }, {opis: "Y1" }, {opis: "Y2" }, {opis: "Y3" }, {opis: "Y4" }, {opis: "Y5" }, {opis: "Y6" } ] },
+                { wybrany: 0,
+                    lista: [ {opis: "?" }, {opis: "Z1" }, {opis: "Z2" }, {opis: "Z3" } ] },
+    ]);
 
     const iloscWierszy = elementyDoWyboru.length;
     let przesunieteMenuY = 0; // przesunięcie w menu po osi Y
@@ -85,26 +75,31 @@ const SzukajMrowkiPage = () => {
                 if (i === kopiaTab.length -1) { i = -1; };
             }
         }
-        setWidoczneElementy( () => kopiaTab);
+        setWidoczneElementy(() => kopiaTab);
         console.log('Przerysowana lista wyboru', widoczneElementy);
     }
-
-    useLayoutEffect( () => {
-        przerysujAktualnePozycje();
-    }, [] );
 
     useEffect(() => {
         przerysujAktualnePozycje();
         return () => {};
     }, []);
-    //przerysujAktualnePozycje();
     
 
-
     const zmienWybranyElement = ( nrWiersza, kierunek ) => {
-        const wi = (nrWiersza + przesunieteMenuY) % iloscWierszy;
-        elementyDoWyboru[wi-1].wybrany += kierunek;
-        przerysujAktualnePozycje();
+        if(timerNieprzesowaj2razy) return;
+        //debugger;
+        console.log('zmienWybranyElement');
+        if((nrWiersza != undefined) && (timerNieprzesowaj2razy == null) ) {
+            timerNieprzesowaj2razy = setTimeout( () => {
+                timerNieprzesowaj2razy = null;
+            }, 100);
+            const wi = (nrWiersza + przesunieteMenuY) % elementyDoWyboru.length;
+            if (kierunek<0) {
+                elementyDoWyboru[wi].wybrany += elementyDoWyboru[wi].lista.length;
+            };
+            elementyDoWyboru[wi].wybrany = (elementyDoWyboru[wi].wybrany + kierunek) % elementyDoWyboru[wi].lista.length;
+            przerysujAktualnePozycje();
+        }
     }
 
     // 14x14 = 196
@@ -138,41 +133,30 @@ const SzukajMrowkiPage = () => {
     )
 
     const handleDragRowA = (e, d) => {
-        setStateRowA({
-            pos: {
-                x: stateRowA.pos.x + d.deltaX,
-                y: stateRowA.pos.y + d.deltaY,
-            }
-        });
-        setStateRowB({
-          pos: {
-            x: stateRowB.pos.x,
-            y: stateRowB.pos.y + d.deltaY,
-          }
-        });
-        setStateRowC({
-          pos: {
-            x: stateRowC.pos.x,
-            y: stateRowC.pos.y + d.deltaY,
-          }
-        });
-        setStateRowD({
-            pos: {
-              x: stateRowD.pos.x,
-              y: stateRowD.pos.y + d.deltaY,
-            }
-        });
-        setStateRowE({
-            pos: {
-                x: stateRowE.pos.x,
-                y: stateRowE.pos.y + d.deltaY,
-            }
-        });
-
+        setStateRowA( (prev) => ({
+            ...prev,  
+            pos: { x: stateRowA.pos.x + d.deltaX, y: stateRowA.pos.y + d.deltaY }
+        }));
+        setStateRowB( (prev) => ({  
+            ...prev,  
+            pos: { x: stateRowB.pos.x,            y: stateRowB.pos.y + d.deltaY }
+        }));
+        setStateRowC((prev) => ({  
+            ...prev,  
+            pos: { x: stateRowC.pos.x,            y: stateRowC.pos.y + d.deltaY }
+        }));
+        setStateRowD((prev) => ({  
+            ...prev,  
+            pos: { x: stateRowD.pos.x,            y: stateRowD.pos.y + d.deltaY }
+        }));
+        setStateRowE((prev) => ({  
+            ...prev, 
+            pos: { x: stateRowE.pos.x,            y: stateRowE.pos.y + d.deltaY }
+        }));
     };
 
     const [stateRowB, setStateRowB] = useState({
-        id: 1,
+        id: 0,
         pos: { x: 0, y: 0 },
         dragable: true,
         scale: 1,
@@ -182,10 +166,7 @@ const SzukajMrowkiPage = () => {
     const handleDragRowB = (e, d) => {
         setStateRowA( (prev) => ({
             ...prev,
-            pos: {
-                x: stateRowA.pos.x,
-                y: stateRowA.pos.y + d.deltaY,
-            }
+            pos: {  x: stateRowA.pos.x,           y: stateRowA.pos.y + d.deltaY }
         }));
 
         setStateRowB( (prev) => ({  
@@ -193,117 +174,76 @@ const SzukajMrowkiPage = () => {
             pos: { x: stateRowB.pos.x + d.deltaX, y: stateRowB.pos.y + d.deltaY } 
         }));
 
-        setStateRowC({
-            pos: {
-                x: stateRowC.pos.x,
-                y: stateRowC.pos.y + d.deltaY,
-            }
-        });
-        setStateRowD({
-            pos: {
-                x: stateRowD.pos.x,
-                y: stateRowD.pos.y + d.deltaY,
-            }
-        });
-        setStateRowE({
-            pos: {
-                x: stateRowE.pos.x,
-                y: stateRowE.pos.y + d.deltaY,
-            }
-        });
-  
-        // setResizeIcon( (prev) => ({ ...prev, save:    {active: false, color: 'black'}  }) )
-
-        // if( stateRowB.pos.x > 50) {
-        //     Animacja_PrzesuwajPoziomo('prawo');
-        // } else if (stateRowB.pos.x < -50) {
-        //     Animacja_PrzesuwajPoziomo('lewo');
-        // } else {
-        //     setStateRowB( (prev) => ({  
-        //         ...prev, 
-        //         scale: 1, 
-        //     }));
-        // }
-
+        setStateRowC((prev) => ({  
+            ...prev, 
+            pos: { x: stateRowC.pos.x,            y: stateRowC.pos.y + d.deltaY }
+        }));
+        setStateRowD((prev) => ({  
+            ...prev, 
+            pos: { x: stateRowD.pos.x,            y: stateRowD.pos.y + d.deltaY }
+        }));
+        setStateRowE((prev) => ({  
+            ...prev, 
+            pos: { x: stateRowE.pos.x,            y: stateRowE.pos.y + d.deltaY }
+        }));
     };
 
 
     const [stateRowC, setStateRowC] = useState({
-        id: 2,
+        id: 1,
         pos: { x: 0, y: 0 }
     })
 
     const handleDragRowC = (e, d) => {
-        setStateRowA({
-          pos: {
-            x: stateRowA.pos.x,
-            y: stateRowA.pos.y + d.deltaY,
-          }
-        });
-        setStateRowB({
-          pos: {
-            x: stateRowB.pos.x,
-            y: stateRowB.pos.y + d.deltaY,
-          }
-        });
-        setStateRowC({
-          pos: {
-            x: stateRowC.pos.x + d.deltaX,
-            y: stateRowC.pos.y + d.deltaY,
-          }
-        });
-        setStateRowD({
-            pos: {
-              x: stateRowD.pos.x,
-              y: stateRowD.pos.y + d.deltaY,
-            }
-        });
-        setStateRowE({
-            pos: {
-                x: stateRowE.pos.x,
-                y: stateRowE.pos.y + d.deltaY,
-            }
-        });
+        setStateRowA((prev) => ({
+            ...prev,
+          pos: { x: stateRowA.pos.x,              y: stateRowA.pos.y + d.deltaY }
+        }));
+        setStateRowB((prev) => ({
+            ...prev,
+          pos: { x: stateRowB.pos.x,              y: stateRowB.pos.y + d.deltaY }
+        }));
+        setStateRowC((prev) => ({
+            ...prev,
+          pos: { x: stateRowC.pos.x + d.deltaX,   y: stateRowC.pos.y + d.deltaY }
+        }));
+        setStateRowD((prev) => ({
+            ...prev,
+            pos: { x: stateRowD.pos.x,            y: stateRowD.pos.y + d.deltaY }
+        }));
+        setStateRowE((prev) => ({
+            ...prev,
+            pos: { x: stateRowE.pos.x,            y: stateRowE.pos.y + d.deltaY }
+        }));
   
     };
 
     const [stateRowD, setStateRowD] = useState({
-        id: 3,
+        id: 2,
         pos: { x: 0, y: 0 } 
     })
 
     const handleDragRowD = (e, d) => {
-        setStateRowA({
-          pos: {
-            x: stateRowA.pos.x,
-            y: stateRowA.pos.y + d.deltaY,
-          }
-        });
-        setStateRowB({
-          pos: {
-            x: stateRowB.pos.x,
-            y: stateRowB.pos.y + d.deltaY,
-          }
-        });
-        setStateRowC({
-          pos: {
-            x: stateRowC.pos.x,
-            y: stateRowC.pos.y + d.deltaY,
-          }
-        });
-        setStateRowD({
-            pos: {
-                x: stateRowD.pos.x + d.deltaX,
-                y: stateRowD.pos.y + d.deltaY,
-            }
-        });
-        setStateRowE({
-            pos: {
-                x: stateRowE.pos.x,
-                y: stateRowE.pos.y + d.deltaY,
-            }
-        });
-  
+        setStateRowA((prev) => ({
+            ...prev,
+          pos: { x: stateRowA.pos.x,              y: stateRowA.pos.y + d.deltaY }
+        }));
+        setStateRowB((prev) => ({
+            ...prev,
+          pos: { x: stateRowB.pos.x,              y: stateRowB.pos.y + d.deltaY }
+        }));
+        setStateRowC((prev) => ({
+            ...prev,
+          pos: { x: stateRowC.pos.x,              y: stateRowC.pos.y + d.deltaY }
+        }));
+        setStateRowD((prev) => ({
+            ...prev,
+            pos: { x: stateRowD.pos.x + d.deltaX,  y: stateRowD.pos.y + d.deltaY }
+        }));
+        setStateRowE((prev) => ({
+            ...prev,
+            pos: {  x: stateRowE.pos.x,            y: stateRowE.pos.y + d.deltaY }
+        }));
     };
 
     const [stateRowE, setStateRowE] = useState(
@@ -311,52 +251,27 @@ const SzukajMrowkiPage = () => {
     )
 
     const handleDragRowE = (e, d) => {
-        setStateRowA({
-          pos: {
-            x: stateRowA.pos.x,
-            y: stateRowA.pos.y + d.deltaY,
-          }
-        });
-        setStateRowB({
-          pos: {
-            x: stateRowB.pos.x,
-            y: stateRowB.pos.y + d.deltaY,
-          }
-        });
-        setStateRowC({
-          pos: {
-            x: stateRowC.pos.x,
-            y: stateRowC.pos.y + d.deltaY,
-          }
-        });
-        setStateRowD({
-            pos: {
-                x: stateRowD.pos.x,
-                y: stateRowD.pos.y + d.deltaY,
-            }
-        });
-        setStateRowE({
-            pos: {
-                x: stateRowE.pos.x + d.deltaX,
-                y: stateRowE.pos.y + d.deltaY,
-            }
-        });
+        setStateRowA((prev) => ({
+            ...prev,
+          pos: { x: stateRowA.pos.x,              y: stateRowA.pos.y + d.deltaY }
+        }));
+        setStateRowB((prev) => ({
+            ...prev,
+          pos: {  x: stateRowB.pos.x,             y: stateRowB.pos.y + d.deltaY }
+        }));
+        setStateRowC((prev) => ({
+            ...prev,
+            pos: {  x: stateRowC.pos.x,           y: stateRowC.pos.y + d.deltaY }
+        }));
+        setStateRowD((prev) => ({
+            ...prev,
+            pos: { x: stateRowD.pos.x,             y: stateRowD.pos.y + d.deltaY }
+        }));
+        setStateRowE((prev) => ({
+            ...prev,
+            pos: { x: stateRowE.pos.x + d.deltaX,  y: stateRowE.pos.y + d.deltaY }
+        }));
     };
-
-
-    // const { deltaXyPos } = stateA1;
-
-
-
-    // const onStart = () => {
-    //     setState({activeDrags: ++state.activeDrags});
-    // };
-    
-    // const onStop = () => {
-    //     setState({activeDrags: --state.activeDrags});
-    // };
-
-    // const dragHandlers = {onStart: onStart, onStop: onStop};
 
 
     const onBeforeCapture = () => {
@@ -380,12 +295,8 @@ const SzukajMrowkiPage = () => {
     const wyrownajPozycje = (state, set_state = () => {})  => {
 
         if(timerAnimacjaHoryzontalna === null) {
-            //console.log('state x', state.pos.x, ' y', state.pos.y);
             let kierunekH = 'prawo';     // 'prawo' / 'lewo'
             let przesuniecieH = 'brak';  // 'brak' / 'srodkowanie' / 'przewijanie'
-            let kierunekV = 'dol';     // 'dol' / 'gora'
-            let przesuniecieV = 'brak';  // 'brak' / 'srodkowanie' / 'przewijanie'
-
 
             if( state.pos.x < -50 ) {
                 przesuniecieH = 'przewijanie';
@@ -394,6 +305,7 @@ const SzukajMrowkiPage = () => {
                 przesuniecieH = 'srodkowanie'
             } else if ( state.pos.x === 0 ){
                 // console.log('nic nie rób');
+                setTimeout( wyrownajPozycjeV(state, set_state), 0 );
             } else if ( state.pos.x > 0 && state.pos.x <= 50 ){
                 przesuniecieH = 'srodkowanie'
                 kierunekH = 'lewo';
@@ -401,41 +313,21 @@ const SzukajMrowkiPage = () => {
                 przesuniecieH = 'przewijanie';
             }
 
-            if( state.pos.y < -50 ) {
-                przesuniecieV = 'przewijanie';
-                kierunekV = 'gora';
-            } else if ( state.pos.y >= -50 && state.pos.y < 0 ) {
-                przesuniecieV = 'srodkowanie'
-            } else if ( state.pos.y === 0 ){
-                //console.log('V nic nie rób');
-            } else if ( state.pos.y > 0 && state.pos.y <= 50 ){
-                przesuniecieV = 'srodkowanie'
-                kierunekV = 'gora';
-            } else {
-                przesuniecieV = 'przewijanie';
-            }
-
-            if( przesuniecieH === 'srodkowanie' || przesuniecieV === 'srodkowanie' ) {
+             if( przesuniecieH === 'srodkowanie' ) {
                 timerAnimacjaHoryzontalna = setInterval( () => {
                     const kierH = kierunekH;
-                    const kierV = kierunekV;
-                    //console.log('state x=', state.pos.x, 'stateB x=', stateRowB.pos.x );
-                    let newPos = {x: 0, y: 0};
                     let deltaH = 0;
-                    let deltaV = 0;
 
                     set_state( (prev) => {
-                        //newPos = prev.pos;
-                        if( ((kierH === 'lewo'  && prev.pos.x <= 0) || 
-                             (kierH === 'prawo' && prev.pos.x >= 0)) &&
-                            ((kierV === 'gora'  && prev.pos.y <= 0) || 
-                             (kierV === 'dol'   && prev.pos.y >= 0)) 
-                            ) {
+                        if( (kierH === 'lewo'  && prev.pos.x <= 0) || 
+                            (kierH === 'prawo' && prev.pos.x >= 0)) {
                             clearInterval(timerAnimacjaHoryzontalna);
+                            setTimeout( wyrownajPozycjeV(state, set_state), 0 );
+
                             timerAnimacjaHoryzontalna = null;
                             return {  
                                 ...prev, 
-                                pos: { x: 0, y: 0 } 
+                                pos: { x: 0, y: prev.pos.y } 
                             }
                         }
                         if ( Math.abs(prev.pos.x) > 5 ) {
@@ -444,32 +336,11 @@ const SzukajMrowkiPage = () => {
                             deltaH = prev.pos.x;
                         }
 
-                        if ( Math.abs(prev.pos.y) > 5 ) {
-                            deltaV = Math.round(prev.pos.y / 5);
-                        } else if ( Math.abs(prev.pos.y) > 0 ) {
-                            deltaV = prev.pos.y;
-                        }
-
-                        newPos.x = prev.pos.x - deltaH;
-                        newPos.y = prev.pos.y - deltaV;
-
                         return {  
                             ...prev, 
-                            // pos: { x: prev.pos.x + (kierH==='lewo'? -3 : 3), y: prev.pos.y  + (kierV==='gora'? -3 : 3)  } 
-                            // pos: { x: prev.pos.x - deltaH, y: prev.pos.y -deltaV } 
-                            pos: { x: newPos.x, y: newPos.y } 
+                            pos: { x: prev.pos.x + (kierH==='lewo'? -3 : 3), y: prev.pos.y } 
                         }
                     });
-
-                    //console.log('newPos.x', newPos.x, ' newPos.y', newPos.y, 'przesonH',  deltaH);
-
-                    setStateRowB( (prev) => ( { ...prev, pos: { x: newPos.x, y: newPos.y } } ));
-                    // setStateRowB( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: prev.pos.y + (kier==='gora'? -5 : 5) } } ));
-                    // setStateRowC( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: prev.pos.y + (kier==='gora'? -5 : 5) } } ));
-                    // setStateRowD( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: prev.pos.y + (kier==='gora'? -5 : 5) } } ));
-                    // setStateRowE( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: prev.pos.y + (kier==='gora'? -5 : 5) } } ));
-
-
                 }, 25);
             } else if (przesuniecieH === 'przewijanie') {
                 timerAnimacjaHoryzontalna = setInterval( () => {
@@ -479,11 +350,11 @@ const SzukajMrowkiPage = () => {
                             (kier === 'prawo' && prev.pos.x >  195) ) {
                             clearInterval(timerAnimacjaHoryzontalna);
                             timerAnimacjaHoryzontalna = null;
-                            //zmienWybranyElement(prev.id, kier==='lewo'? -1 : 1);
+                            setTimeout( zmienWybranyElement(prev.id, kier==='lewo'? 1 : -1), 0);
+                            setTimeout( wyrownajPozycjeV(state, set_state), 0 );
                             return {  
                                 ...prev, 
-                                // pos: { x: 0, y: state.pos.y } 
-                                pos: { x: 0, y: 0 } 
+                                pos: { x: 0, y: state.pos.y } 
                             }
                         }
                         return {  
@@ -494,9 +365,12 @@ const SzukajMrowkiPage = () => {
                 }, 25);
             }
         };
-        
-        // if(timerAnimacjaVertykalna  === null) {
-        if(timerAnimacjaVertykalna  === "siemka") {
+    };
+
+
+    const wyrownajPozycjeV = (state, set_state = () => {})  => {
+
+        if(timerAnimacjaVertykalna  === null) {
             let kierunekV = 'dol';     // 'dol' / 'gora'
             let przesuniecieV = 'brak';  // 'brak' / 'srodkowanie' / 'przewijanie'
 
@@ -785,7 +659,7 @@ const SzukajMrowkiPage = () => {
                         grid={skokPoSiatce}
                     >
                         <div className="box">
-                            {widoczneElementy[2][3].opis}
+                            {widoczneElementy[2][4].opis}
 
                         </div>
                     </Draggable>
