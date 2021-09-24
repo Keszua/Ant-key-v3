@@ -9,6 +9,7 @@ import Draggable  from 'react-draggable';
 let timerAnimacjaHoryzontalna = null;
 let timerAnimacjaVertykalna = null;
 let timerNieprzesowaj2razy = null;
+let timerNieprzesowaj2razyV = null;
 
 
 const przesunTablice = (tablica, iloscPoz) => {
@@ -20,7 +21,7 @@ const przesunTablice = (tablica, iloscPoz) => {
 }
 
 const servis_pokzujWspolzedne = false;
-
+let przesunieteMenuY = 0; // przesunięcie w menu po osi Y
 
 
 const SzukajMrowkiPage = () => {
@@ -29,7 +30,7 @@ const SzukajMrowkiPage = () => {
     let widoczneElementyInit = [ 
         [ {opis: "A-2" }, {opis: "A-1" }, {opis: "A 0" }, {opis: "A 1" }, {opis: "A 2" } ] ,
         [ {opis: "B-2" }, {opis: "B-1" }, {opis: "B 0" }, {opis: "B 1" }, {opis: "B 2" } ] ,
-        [ {opis: "C-2" }, {opis: "C-1" }, {opis: "C 0" }, {opis: "C 8" }, {opis: "C 2" } ] ,
+        [ {opis: "C-2" }, {opis: "C-1" }, {opis: "C 0" }, {opis: "C 1" }, {opis: "C 2" } ] ,
         [ {opis: "D-2" }, {opis: "D-1" }, {opis: "D 0" }, {opis: "D 1" }, {opis: "D 2" } ] ,
         [ {opis: "E-2" }, {opis: "E-1" }, {opis: "E 0" }, {opis: "E 1" }, {opis: "E 2" } ] ,
     ];
@@ -44,12 +45,13 @@ const SzukajMrowkiPage = () => {
                     lista: [ {opis: "?" }, {opis: "Z1" }, {opis: "Z2" }, {opis: "Z3" } ] },
     ]);
 
-    const iloscWierszy = elementyDoWyboru.length;
-    let przesunieteMenuY = 0; // przesunięcie w menu po osi Y
-
+    //const [przesunieteMenuY, setPrzesunieteMenuY]  = useState(0);
+    
     const przerysujAktualnePozycje = () => {
+        const iloscWierszy = elementyDoWyboru.length;
         let wiersz = przesunieteMenuY;
         const kopiaTab = widoczneElementy.slice();
+        //debugger;
 
         if (iloscWierszy) {
             for (let i = 1; i < kopiaTab.length; i++) {
@@ -72,11 +74,13 @@ const SzukajMrowkiPage = () => {
                 wiersz = ++wiersz % iloscWierszy;
 
                 if (i === 0) break;
-                if (i === kopiaTab.length -1) { i = -1; };
+                if (i === kopiaTab.length -1) {
+                    i = -1; 
+                    wiersz = ( przesunieteMenuY + iloscWierszy-1) % iloscWierszy;
+                };
             }
         }
         setWidoczneElementy(() => kopiaTab);
-        console.log('Przerysowana lista wyboru', widoczneElementy);
     }
 
     useEffect(() => {
@@ -85,49 +89,45 @@ const SzukajMrowkiPage = () => {
     }, []);
     
 
-    const zmienWybranyElement = ( nrWiersza, kierunek ) => {
+    const zmienWybranyElementH = ( nrWiersza, kierunek ) => {
         if(timerNieprzesowaj2razy) return;
+        const kopiaElementyDoWyboru = elementyDoWyboru.slice();
         //debugger;
-        console.log('zmienWybranyElement');
         if((nrWiersza != undefined) && (timerNieprzesowaj2razy == null) ) {
             timerNieprzesowaj2razy = setTimeout( () => {
                 timerNieprzesowaj2razy = null;
             }, 100);
-            const wi = (nrWiersza + przesunieteMenuY) % elementyDoWyboru.length;
+            const wi = (nrWiersza + przesunieteMenuY) % kopiaElementyDoWyboru.length;
             if (kierunek<0) {
-                elementyDoWyboru[wi].wybrany += elementyDoWyboru[wi].lista.length;
+                kopiaElementyDoWyboru[wi].wybrany += kopiaElementyDoWyboru[wi].lista.length;
             };
-            elementyDoWyboru[wi].wybrany = (elementyDoWyboru[wi].wybrany + kierunek) % elementyDoWyboru[wi].lista.length;
+            kopiaElementyDoWyboru[wi].wybrany = (kopiaElementyDoWyboru[wi].wybrany + kierunek) % kopiaElementyDoWyboru[wi].lista.length;
+            setElementyDoWyboru(kopiaElementyDoWyboru);
             przerysujAktualnePozycje();
         }
     }
 
-    // 14x14 = 196
-    // 196x2 = 392
-    // 196x3 = 588
-    // 14*3 = 42
+    const zmienWybranyElementV = ( kierunek ) => {
+        if(timerNieprzesowaj2razyV) return;
+        //debugger;
 
-    // 12x12=144
-    // 144x3=432
+        if (kierunek === 'gora') {
+            const nowyIndeks = (przesunieteMenuY +1) % elementyDoWyboru.length;
 
+            //setPrzesunieteMenuY( nowyIndeks);
+            przesunieteMenuY = nowyIndeks;
+            
+            przerysujAktualnePozycje();
+            //setTimeout( () => przerysujAktualnePozycje(), 1000);
+        } else if (kierunek === 'dol') {
+            let kopia = przesunieteMenuY + elementyDoWyboru.length;
+            kopia = (kopia  -1 ) % elementyDoWyboru.length;
+            //setPrzesunieteMenuY( kopia );
+            przesunieteMenuY = kopia;
+            przerysujAktualnePozycje();
+        }
+    }
 
-
-
-    //const sliderW = [sliderH1, sliderH2];
-
-
-
-    
-    // const handleDrag = (e, d) => {
-    //     const { x, y } = stateA1.deltaXyPos;
-    //     setStateA1({
-    //         deltaXyPos: {
-    //             x: x + d.deltaX,
-    //             y: y + d.deltaY,
-    //         }
-    //     });
-    // };
-    
     const [stateRowA, setStateRowA] = useState(
         {  pos: { x: 0, y: 0 } }
     )
@@ -350,8 +350,8 @@ const SzukajMrowkiPage = () => {
                             (kier === 'prawo' && prev.pos.x >  195) ) {
                             clearInterval(timerAnimacjaHoryzontalna);
                             timerAnimacjaHoryzontalna = null;
-                            setTimeout( zmienWybranyElement(prev.id, kier==='lewo'? 1 : -1), 0);
-                            setTimeout( wyrownajPozycjeV(state, set_state), 0 );
+                            setTimeout( zmienWybranyElementH(prev.id, kier==='lewo'? 1 : -1), 0);
+                            setTimeout( wyrownajPozycjeV(state, set_state), 1);
                             return {  
                                 ...prev, 
                                 pos: { x: 0, y: state.pos.y } 
@@ -367,7 +367,6 @@ const SzukajMrowkiPage = () => {
         };
     };
 
-
     const wyrownajPozycjeV = (state, set_state = () => {})  => {
 
         if(timerAnimacjaVertykalna  === null) {
@@ -375,20 +374,20 @@ const SzukajMrowkiPage = () => {
             let przesuniecieV = 'brak';  // 'brak' / 'srodkowanie' / 'przewijanie'
 
             if( state.pos.y < -50 ) {
-                console.log('przewijanie V gora')
+                // console.log('przewijanie V gora')
                 przesuniecieV = 'przewijanie';
                 kierunekV = 'gora';
             } else if ( state.pos.y >= -50 && state.pos.y < 0 ) {
-                console.log('srodkowanie V w dol')
+                // console.log('srodkowanie V w dol')
                 przesuniecieV = 'srodkowanie'
             } else if ( state.pos.y === 0 ){
                 console.log('V nic nie rób');
             } else if ( state.pos.y > 0 && state.pos.y <= 50 ){
-                console.log('srodkowanie V w górę')
+                // console.log('srodkowanie V w górę')
                 przesuniecieV = 'srodkowanie'
                 kierunekV = 'gora';
             } else {
-                console.log('przewijanie V w dół')
+                // console.log('przewijanie V w dół')
                 przesuniecieV = 'przewijanie';
             }
 
@@ -438,6 +437,7 @@ const SzukajMrowkiPage = () => {
                         setStateRowC( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: 0 } } ));
                         setStateRowD( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: 0 } } ));
                         setStateRowE( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: 0 } } ));
+                        setTimeout( zmienWybranyElementV(kier), 0);
                     } else {
                         setStateRowA( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: prev.pos.y + (kier==='gora'? -5 : 5) } } ));
                         setStateRowB( (prev) => ( { ...prev, pos: { x: prev.pos.x, y: prev.pos.y + (kier==='gora'? -5 : 5) } } ));
@@ -509,7 +509,7 @@ const SzukajMrowkiPage = () => {
                         onDrag={handleDragRowA}
                         grid={skokPoSiatce}
                     >
-                        <div className="box">
+                        <div className="box box__select">
                             {widoczneElementy[0][2].opis}
                         </div>
                     </Draggable>
@@ -752,7 +752,7 @@ const SzukajMrowkiPage = () => {
                         //axis="y"
                         grid={skokPoSiatce}
                     >
-                        <div className="box">
+                        <div className="box box__select">
                             {widoczneElementy[4][2].opis}
                         </div>
                     </Draggable>
