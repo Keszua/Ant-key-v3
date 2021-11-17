@@ -1,0 +1,12 @@
+Jeśli po przeniesieniu projektu lub ściągnięcie z githuba nie bedą działać style, to trzeba w:
+File -> Preferences -> Settings 
+Przejść na wersję settings.json i wkleić taki obiekt:
+
+    "liveSassCompile.settings.formats":[
+        {
+            "format": "expanded",
+            "extensionName": ".css",
+            "savePath": "~/../css/"
+        }
+    ]
+
